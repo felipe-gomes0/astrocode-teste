@@ -62,6 +62,6 @@ Certifique-se de ter instalado em sua máquina:
 
 ## 🐳 Comandos Úteis
 
-- **Parar a aplicação:** `Ctrl+C` (se rodando no terminal) ou `docker-compose down`.
-- **Recriar containers:** `docker-compose up --build --force-recreate`.
-- **Logs do backend:** `docker-compose logs -f backend`.
+- **Parar a aplicação:** `Ctrl+C` (se rodando no terminal) ou `docker compose down`.
+- **Recriar containers:** `docker compose up --build --force-recreate`.
+- **Logs do backend:** `docker compose logs -f backend`.
