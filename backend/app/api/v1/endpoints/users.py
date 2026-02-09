@@ -1,4 +1,5 @@
 from typing import Any, List
+from uuid import UUID
 
 from fastapi import APIRouter, Body, Depends, HTTPException
 from fastapi.encoders import jsonable_encoder
@@ -58,7 +59,7 @@ def create_user(
 def update_user(
     *,
     db: Session = Depends(get_db),
-    user_id: int,
+    user_id: UUID,
     user_in: UserUpdate,
 ) -> UserSchema:
     """
@@ -80,7 +81,7 @@ def update_user(
     responses={404: {"description": "The user with this username does not exist in the system"}},
 )
 def read_user_by_id(
-    user_id: int,
+    user_id: UUID,
     db: Session = Depends(get_db),
 ) -> UserSchema:
     """
@@ -103,7 +104,7 @@ def read_user_by_id(
 def delete_user(
     *,
     db: Session = Depends(get_db),
-    user_id: int,
+    user_id: UUID,
 ) -> UserSchema:
     """
     Delete a user.
