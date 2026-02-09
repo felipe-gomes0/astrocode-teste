@@ -53,7 +53,7 @@ Certifique-se de ter instalado em sua máquina:
     Execute o comando abaixo para construir e iniciar os containers:
 
     ```bash
-    docker-compose up --build
+    docker compose up --build
     ```
 
 4.  **Acesse a aplicação:**
@@ -62,6 +62,6 @@ Certifique-se de ter instalado em sua máquina:
 
 ## 🐳 Comandos Úteis
 
-- **Parar a aplicação:** `Ctrl+C` (se rodando no terminal) ou `docker-compose down`.
-- **Recriar containers:** `docker-compose up --build --force-recreate`.
-- **Logs do backend:** `docker-compose logs -f backend`.
+- **Parar a aplicação:** `Ctrl+C` (se rodando no terminal) ou `docker compose down`.
+- **Recriar containers:** `docker compose up --build --force-recreate`.
+- **Logs do backend:** `docker compose logs -f backend`.

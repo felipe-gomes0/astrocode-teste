@@ -13,6 +13,9 @@ class Settings(BaseSettings):
     POSTGRES_PORT: str = "5432"
     POSTGRES_DB: str = "app"
 
+    # CORS
+    BACKEND_CORS_ORIGINS: list[str] = []
+
     DATABASE_URL: Optional[str] = None
 
     model_config = SettingsConfigDict(
