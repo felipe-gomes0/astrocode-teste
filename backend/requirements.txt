@@ -10,5 +10,3 @@ alembic
 psycopg2-binary
 python-dotenv
 email-validator
-python-dotenv
-email-validator
