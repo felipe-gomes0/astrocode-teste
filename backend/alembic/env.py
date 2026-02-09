@@ -1,27 +1,15 @@
-<<<<<<< Updated upstream
-from logging.config import fileConfig
-
-=======
 import os
 import sys
 from logging.config import fileConfig
 
 sys.path.append(os.getcwd())
-print(f"Current working directory: {os.getcwd()}")
-print(f"sys.path: {sys.path}")
 try:
     import app
-    print(f"app module: {app}")
     import app.core
-    print(f"app.core module: {app.core}")
     import app.core.config
-    print(f"app.core.config module: {app.core.config}")
     import app.core.database
-    print(f"app.core.database module: {app.core.database}")
 except Exception as e:
     print(f"Error importing: {e}")
-
->>>>>>> Stashed changes
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 
