@@ -1,5 +1,6 @@
 from typing import Optional
 from datetime import datetime
+from uuid import UUID
 from pydantic import BaseModel, EmailStr
 from app.models.user import UserType
 
@@ -25,7 +26,7 @@ class UserUpdate(BaseModel):
 
 # Properties shared by models stored in DB
 class UserInDBBase(UserBase):
-    id: int
+    id: UUID
     created_at: datetime
     updated_at: datetime
 

@@ -10,9 +10,11 @@ class ProfessionalBase(BaseModel):
     photo_url: Optional[str] = None
     address: Optional[str] = None
 
+from uuid import UUID
+
 # Properties to receive via API on creation
 class ProfessionalCreate(ProfessionalBase):
-    user_id: int
+    user_id: UUID
     speciality: str
 
 # Properties to receive via API on update
@@ -22,7 +24,7 @@ class ProfessionalUpdate(ProfessionalBase):
 # Properties shared by models stored in DB
 class ProfessionalInDBBase(ProfessionalBase):
     id: int
-    user_id: int
+    user_id: UUID
     created_at: datetime
     updated_at: datetime
     

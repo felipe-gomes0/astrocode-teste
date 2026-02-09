@@ -13,10 +13,12 @@ class AppointmentBase(BaseModel):
     status: Optional[AppointmentStatus] = AppointmentStatus.PENDING
     notes: Optional[str] = None
 
+from uuid import UUID
+
 # Properties to receive via API on creation
 class AppointmentCreate(AppointmentBase):
     professional_id: int
-    client_id: int
+    client_id: UUID
     service_id: int
 
 # Properties to receive via API on update
@@ -30,7 +32,7 @@ class AppointmentUpdate(BaseModel):
 class AppointmentInDBBase(AppointmentBase):
     id: int
     professional_id: int
-    client_id: int
+    client_id: UUID
     service_id: int
     created_at: datetime
     updated_at: datetime

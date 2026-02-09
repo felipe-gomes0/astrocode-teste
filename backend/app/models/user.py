@@ -3,6 +3,8 @@ from sqlalchemy.orm import relationship
 from datetime import datetime
 import enum
 from app.core.database import Base
+import uuid6
+from sqlalchemy.dialects.postgresql import UUID
 
 class UserType(str, enum.Enum):
     PROFESSIONAL = "professional"
@@ -11,7 +13,7 @@ class UserType(str, enum.Enum):
 class User(Base):
     __tablename__ = "users"
     
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid6.uuid7, index=True)
     email = Column(String, unique=True, index=True, nullable=False)
     password = Column(String, nullable=False)
     name = Column(String, nullable=False)
