@@ -1,6 +1,6 @@
 from typing import Optional, List
 from datetime import datetime
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from app.schemas.user import User
 
 # Shared properties
@@ -28,8 +28,7 @@ class ProfessionalInDBBase(ProfessionalBase):
     created_at: datetime
     updated_at: datetime
     
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 # Additional properties to return via API
 class Professional(ProfessionalInDBBase):

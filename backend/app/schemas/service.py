@@ -1,7 +1,7 @@
 from typing import Optional
 from datetime import datetime
 from decimal import Decimal
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 # Shared properties
 class ServiceBase(BaseModel):
@@ -30,8 +30,7 @@ class ServiceInDBBase(ServiceBase):
     created_at: datetime
     updated_at: datetime
     
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 # Additional properties to return via API
 class Service(ServiceInDBBase):
