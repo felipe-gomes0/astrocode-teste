@@ -13,6 +13,18 @@ from app.schemas.user import User as UserSchema, UserCreate, UserUpdate
 
 router = APIRouter()
 
+from app.api import deps
+from app.models.user import User
+
+@router.get("/me", response_model=UserSchema)
+def read_user_me(
+    current_user: User = Depends(deps.get_current_active_user),
+) -> Any:
+    """
+    Get current user.
+    """
+    return current_user
+
 
 @router.get("/", response_model=List[UserSchema])
 def read_users(
@@ -105,6 +117,7 @@ def delete_user(
     *,
     db: Session = Depends(get_db),
     user_id: UUID,
+    current_user: User = Depends(deps.get_current_active_user),
 ) -> UserSchema:
     """
     Delete a user.
@@ -114,6 +127,11 @@ def delete_user(
         raise HTTPException(
             status_code=404,
             detail="The user with this username does not exist in the system",
+        )
+    if user.id != current_user.id:
+        raise HTTPException(
+            status_code=403,
+            detail="Not enough permissions",
         )
     user = crud_user.remove(db, id=user_id)
     return user
