@@ -73,6 +73,7 @@ def update_user(
     db: Session = Depends(get_db),
     user_id: UUID,
     user_in: UserUpdate,
+    current_user: User = Depends(deps.get_current_active_user),
 ) -> UserSchema:
     """
     Update a user.
@@ -82,6 +83,11 @@ def update_user(
         raise HTTPException(
             status_code=404,
             detail="The user with this username does not exist in the system",
+        )
+    if user.id != current_user.id:
+        raise HTTPException(
+            status_code=403,
+            detail="Not enough permissions",
         )
     user = crud_user.update(db, db_obj=user, obj_in=user_in)
     return user
