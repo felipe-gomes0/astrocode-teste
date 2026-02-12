@@ -4,12 +4,14 @@ from datetime import datetime
 from app.core.database import Base
 from app.core.enums.appointment_status import AppointmentStatus
 
+from sqlalchemy.dialects.postgresql import UUID
+
 class Appointment(Base):
     __tablename__ = "appointments"
     
     id = Column(Integer, primary_key=True, index=True)
     professional_id = Column(Integer, ForeignKey("professionals.id"))
-    client_id = Column(Integer, ForeignKey("users.id"))
+    client_id = Column(UUID(as_uuid=True), ForeignKey("users.id"))
     service_id = Column(Integer, ForeignKey("services.id"))
     date_time = Column(DateTime, nullable=False)
     duration = Column(Integer, nullable=False)  

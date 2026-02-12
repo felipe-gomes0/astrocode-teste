@@ -3,11 +3,13 @@ from sqlalchemy.orm import relationship
 from datetime import datetime
 from app.core.database import Base
 
+from sqlalchemy.dialects.postgresql import UUID
+
 class Professional(Base):
     __tablename__ = "professionals"
     
     id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey("users.id"), unique=True)
+    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), unique=True)
     speciality = Column(String)
     description = Column(Text)
     photo_url = Column(String)

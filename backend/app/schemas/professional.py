@@ -1,6 +1,6 @@
 from typing import Optional, List
 from datetime import datetime
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from app.schemas.user import User
 
 # Shared properties
@@ -10,9 +10,11 @@ class ProfessionalBase(BaseModel):
     photo_url: Optional[str] = None
     address: Optional[str] = None
 
+from uuid import UUID
+
 # Properties to receive via API on creation
 class ProfessionalCreate(ProfessionalBase):
-    user_id: int
+    user_id: UUID
     speciality: str
 
 # Properties to receive via API on update
@@ -22,12 +24,11 @@ class ProfessionalUpdate(ProfessionalBase):
 # Properties shared by models stored in DB
 class ProfessionalInDBBase(ProfessionalBase):
     id: int
-    user_id: int
+    user_id: UUID
     created_at: datetime
     updated_at: datetime
     
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 # Additional properties to return via API
 class Professional(ProfessionalInDBBase):

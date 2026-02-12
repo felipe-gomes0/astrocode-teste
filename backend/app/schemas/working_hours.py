@@ -1,6 +1,6 @@
 from typing import Optional
 from datetime import time
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 # Shared properties
 class WorkingHoursBase(BaseModel):
@@ -25,8 +25,7 @@ class WorkingHoursInDBBase(WorkingHoursBase):
     id: int
     professional_id: int
     
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 # Additional properties to return via API
 class WorkingHours(WorkingHoursInDBBase):
