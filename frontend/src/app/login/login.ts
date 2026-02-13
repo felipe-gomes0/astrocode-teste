@@ -8,7 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Router } from '@angular/router';
-import { AuthService } from '../auth';
+import { AuthService } from '../core/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -58,8 +58,9 @@ export class LoginComponent {
         },
         error: (err) => {
           this.isLoading = false;
-          this.errorMessage = 'Senha ou email inválidos';
-
+          // Error handling is now managed by ErrorInterceptor and NotificationService
+          // We can optionally keep local error message or let the global one handle it
+          // this.errorMessage = 'Senha ou email inválidos'; 
         }
       });
     }

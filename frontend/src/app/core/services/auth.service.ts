@@ -1,0 +1,92 @@
+import { HttpClient } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
+import { Router } from '@angular/router';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
+import { environment } from '../../../environments/environment';
+import { StorageService } from './storage.service';
+
+export interface User {
+  id: number;
+  email: string;
+  nome: string;
+  tipo: 'professional' | 'client';
+  telefone?: string;
+}
+
+interface LoginResponse {
+  access_token: string;
+  token_type: string;
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+export class AuthService {
+  private http = inject(HttpClient);
+  private router = inject(Router);
+  private storageService = inject(StorageService);
+  
+  private currentUserSubject = new BehaviorSubject<User | null>(null);
+  public currentUser$ = this.currentUserSubject.asObservable();
+  
+  public isAuthenticated$ = this.currentUser$.pipe(
+    map(user => !!user)
+  );
+
+  constructor() {
+    this.loadUserFromStorage();
+  }
+
+  private loadUserFromStorage(): void {
+    const user = this.storageService.getUser();
+    if (user) {
+      this.currentUserSubject.next(user);
+    }
+  }
+
+  login(email: string, password: string): Observable<LoginResponse> {
+    const formData = new FormData();
+    formData.append('username', email);
+    formData.append('password', password);
+
+    return this.http.post<LoginResponse>(
+      `${environment.apiUrl}/auth/access-token`, // Adjusted endpoint to match backend
+      formData
+    ).pipe(
+      tap(response => {
+        this.storageService.setToken(response.access_token);
+        this.loadCurrentUser();
+      })
+    );
+  }
+
+  register(userData: any): Observable<User> {
+    return this.http.post<User>(
+      `${environment.apiUrl}/auth/register`,
+      userData
+    );
+  }
+
+  logout(): void {
+    this.storageService.clear();
+    this.currentUserSubject.next(null);
+    this.router.navigate(['/login']); // Adjusted route
+  }
+
+  private loadCurrentUser(): void {
+    this.http.get<User>(`${environment.apiUrl}/users/me`).subscribe({
+      next: (user) => {
+        this.currentUserSubject.next(user);
+        this.storageService.setUser(user);
+      },
+      error: () => {
+        this.logout();
+      }
+    });
+  }
+
+  getCurrentUser(): User | null {
+    return this.currentUserSubject.value;
+  }
+}
