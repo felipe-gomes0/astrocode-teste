@@ -52,12 +52,12 @@ export class LoginComponent {
           this.isLoading = false;
           // Navigate to dashboard or home
           // this.router.navigate(['/dashboard']);
-          alert('Login successful!');
+          alert('Login realizado com sucesso!');
         },
         error: (err) => {
           this.isLoading = false;
-          this.errorMessage = 'Invalid email or password';
-          console.error('Login error:', err);
+          this.errorMessage = 'Senha ou email inválidos';
+
         }
       });
     }
