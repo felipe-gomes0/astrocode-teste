@@ -19,7 +19,7 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
 
     # CORS
-    BACKEND_CORS_ORIGINS: list[str] = []
+    BACKEND_CORS_ORIGINS: list[str] = ["http://localhost:4200", "http://localhost:8000"]
 
     DATABASE_URL: Optional[str] = None
 
