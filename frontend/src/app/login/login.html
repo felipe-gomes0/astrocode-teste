@@ -50,7 +50,7 @@
             class="full-width"
           >
             <span *ngIf="!isLoading">Entrar</span>
-            <span *ngIf="isLoading">Entrando...</span>
+            <mat-spinner diameter="20" *ngIf="isLoading"></mat-spinner>
           </button>
         </div>
       </form>
