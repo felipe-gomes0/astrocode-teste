@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { map, switchMap, tap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { StorageService } from './storage.service';
 
@@ -23,10 +23,6 @@ interface LoginResponse {
   providedIn: 'root'
 })
 export class AuthService {
-  private http = inject(HttpClient);
-  private router = inject(Router);
-  private storageService = inject(StorageService);
-  
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
   
@@ -34,7 +30,11 @@ export class AuthService {
     map(user => !!user)
   );
 
-  constructor() {
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private storageService: StorageService
+  ) {
     this.loadUserFromStorage();
   }
 
@@ -45,7 +45,7 @@ export class AuthService {
     }
   }
 
-  login(email: string, password: string): Observable<LoginResponse> {
+  login(email: string, password: string): Observable<User> {
     const body = new URLSearchParams();
     body.set('username', email);
     body.set('password', password);
@@ -59,7 +59,16 @@ export class AuthService {
     ).pipe(
       tap(response => {
         this.storageService.setToken(response.access_token);
-        this.loadCurrentUser();
+      }),
+      switchMap(() => this.http.get<User>(`${environment.apiUrl}/users/me`)),
+      tap({
+        next: (user) => {
+          this.currentUserSubject.next(user);
+          this.storageService.setUser(user);
+        },
+        error: () => {
+          this.logout();
+        }
       })
     );
   }
