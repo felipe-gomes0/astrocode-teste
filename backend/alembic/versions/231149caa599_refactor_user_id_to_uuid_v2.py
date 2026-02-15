@@ -21,19 +21,23 @@ def upgrade() -> None:
     op.alter_column('appointments', 'client_id',
                existing_type=sa.INTEGER(),
                type_=sa.UUID(),
-               existing_nullable=True)
+               existing_nullable=True,
+               postgresql_using='client_id::text::uuid')
     op.alter_column('professionals', 'user_id',
                existing_type=sa.INTEGER(),
                type_=sa.UUID(),
-               existing_nullable=True)
+               existing_nullable=True,
+               postgresql_using='user_id::text::uuid')
     op.alter_column('reviews', 'client_id',
                existing_type=sa.INTEGER(),
                type_=sa.UUID(),
-               existing_nullable=False)
+               existing_nullable=False,
+               postgresql_using='client_id::text::uuid')
     op.alter_column('users', 'id',
                existing_type=sa.INTEGER(),
                type_=sa.UUID(),
-               existing_nullable=False)
+               existing_nullable=False,
+               postgresql_using='id::text::uuid')
     # ### end Alembic commands ###
 
 
