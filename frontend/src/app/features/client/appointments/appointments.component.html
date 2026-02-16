@@ -1,0 +1,50 @@
+<div class="appointments-container">
+  <h1>Meus Agendamentos</h1>
+
+  <div class="appointments-grid" *ngIf="!loading">
+    <mat-card *ngFor="let appointment of appointments" [class.cancelled]="appointment.status === 'cancelado'">
+      <mat-card-header>
+        <div class="status-badge" [ngClass]="appointment.status">
+            {{ getStatusLabel(appointment.status) }}
+        </div>
+        <mat-card-title>{{ appointment.service_name || 'Serviço' }}</mat-card-title>
+        <mat-card-subtitle>
+            com {{ appointment.professional_name || 'Profissional' }}
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <div class="info-row">
+            <mat-icon>calendar_today</mat-icon>
+            <span>{{ getFormattedDate(appointment.data_hora) }}</span>
+        </div>
+        <div class="info-row">
+            <mat-icon>schedule</mat-icon>
+            <span>{{ appointment.duracao }} min</span>
+        </div>
+        <div class="info-row" *ngIf="appointment.service_price">
+            <mat-icon>attach_money</mat-icon>
+            <span>R$ {{ appointment.service_price | number:'1.2-2' }}</span>
+        </div>
+      </mat-card-content>
+
+      <mat-card-actions>
+        <button 
+          mat-button 
+          color="warn" 
+          *ngIf="canCancel(appointment)"
+          (click)="cancelAppointment(appointment)">
+          Cancelar
+        </button>
+      </mat-card-actions>
+    </mat-card>
+
+    <div class="empty-state" *ngIf="appointments.length === 0">
+        <mat-icon>event_busy</mat-icon>
+        <p>Você ainda não tem agendamentos.</p>
+        <button mat-raised-button color="primary" routerLink="/client/search">
+            Buscar Profissionais
+        </button>
+    </div>
+  </div>
+</div>
