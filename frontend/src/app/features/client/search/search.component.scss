@@ -1,0 +1,73 @@
+.search-container {
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.search-header {
+  text-align: center;
+  margin-bottom: 40px;
+
+  h1 {
+    font-size: 2.5rem;
+    margin-bottom: 24px;
+    color: #333;
+  }
+
+  .search-field {
+    width: 100%;
+    max-width: 600px;
+  }
+}
+
+.professionals-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+.professional-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  img {
+    height: 200px;
+    object-fit: cover;
+  }
+
+  mat-card-content {
+      flex-grow: 1;
+      padding-top: 16px;
+      
+      p {
+          margin-bottom: 16px;
+          line-height: 1.5;
+          color: #666;
+      }
+  }
+  
+  .services-list {
+      margin-bottom: 16px;
+  }
+
+  .location {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #666;
+    margin-top: 8px;
+  }
+
+  mat-card-actions {
+    padding: 16px;
+    display: flex;
+    justify-content: flex-end;
+  }
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  padding: 40px;
+}
