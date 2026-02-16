@@ -12,7 +12,9 @@ export class ServiceManagementService {
   private apiUrl = `${environment.apiUrl}/services`;
 
   getServicesByProfessional(professionalId: number): Observable<Service[]> {
-    return this.http.get<Service[]>(`${this.apiUrl}/professional/${professionalId}`);
+    return this.http.get<Service[]>(`${this.apiUrl}/`, {
+        params: { professional_id: professionalId.toString() }
+    });
   }
 
   createService(service: Partial<Service>): Observable<Service> {
