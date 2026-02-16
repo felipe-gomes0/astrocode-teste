@@ -82,7 +82,7 @@ export class BookingComponent implements OnInit {
 
   loadServices(professionalId: number): void {
     this.serviceManagementService.getServicesByProfessional(professionalId).subscribe({
-      next: (services) => {
+      next: (services: Service[]) => {
         this.services = services;
       }
     });

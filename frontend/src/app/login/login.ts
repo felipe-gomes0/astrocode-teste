@@ -10,6 +10,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Router } from '@angular/router';
 import { AuthService } from '../core/services/auth.service';
 
+import { LoadingService } from '../core/services/loading.service';
+
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -36,6 +38,7 @@ export class LoginComponent {
   loginForm: FormGroup;
   hidePassword = true;
   errorMessage = '';
+  isLoading = false;
 
   constructor() {
     this.loginForm = this.fb.group({
