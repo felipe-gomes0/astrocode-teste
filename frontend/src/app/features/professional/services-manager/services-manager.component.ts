@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
@@ -28,8 +28,9 @@ export class ServicesManagerComponent implements OnInit {
   private serviceManagementService = inject(ServiceManagementService);
   private dialog = inject(MatDialog);
 
-  // Injected mainly for ID access
   private authService = inject(AuthService);
+  
+  private cdr = inject(ChangeDetectorRef);
   
   services: Service[] = [];
   displayedColumns: string[] = ['name', 'duration', 'price', 'actions'];
@@ -46,6 +47,7 @@ export class ServicesManagerComponent implements OnInit {
       if (!professionalId) return;
       this.serviceManagementService.getServicesByProfessional(professionalId).subscribe(services => {
           this.services = services;
+          this.cdr.detectChanges();
       });
   }
 
@@ -70,7 +72,6 @@ export class ServicesManagerComponent implements OnInit {
   deleteService(service: Service): void {
     if(confirm('Tem certeza que deseja excluir este serviço?')) {
         this.serviceManagementService.deleteService(service.id).subscribe(() => {
-            // Reload services. Need to store current prof ID.
             this.authService.currentUser.subscribe(user => {
                  if (user && user.type === 'professional' && user.professional) {
                      this.loadServices(user.professional.id);

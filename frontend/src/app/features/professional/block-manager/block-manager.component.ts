@@ -167,7 +167,7 @@ export class BlockManagerComponent implements OnInit {
 
     const newBlock = {
       professional_id: this.currentProfessionalId,
-      start_time: val.start, // Send as is (datetime-local string is mostly ISO compatible or needs conversion)
+      start_time: val.start,
       end_time: val.end,
       reason: val.reason
     };

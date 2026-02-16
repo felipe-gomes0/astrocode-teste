@@ -117,7 +117,12 @@ export class ServiceDialogComponent {
         error: (err: any) => {
           this.loading = false;
           console.error(err);
-          alert('Erro ao atualizar serviço');
+          if (err.status === 404) {
+            alert('Serviço não encontrado. Ele pode ter sido excluído.');
+            this.dialogRef.close(); // Close dialog as service is gone
+          } else {
+            alert('Erro ao atualizar serviço: ' + (err.error?.detail || 'Erro desconhecido'));
+          }
         }
       });
     } else {

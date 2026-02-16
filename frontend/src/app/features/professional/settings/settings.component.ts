@@ -36,7 +36,7 @@ export class SettingsComponent implements OnInit {
   private professionalService = inject(ProfessionalService);
   private authService = inject(AuthService);
   private snackBar = inject(MatSnackBar);
-  private http = inject(HttpClient); // Direct usage for Working Hours
+  private http = inject(HttpClient);
 
   profileForm: FormGroup;
   workingHoursForm: FormGroup;
@@ -44,7 +44,7 @@ export class SettingsComponent implements OnInit {
   loading = false;
   
   daysOfWeek = [
-    { id: 0, name: 'Segunda-feira' }, // Adjust 0 based on backend logic. Usually 0=Sunday or Monday. Python datetime.weekday() 0=Monday.
+    { id: 0, name: 'Segunda-feira' },
     { id: 1, name: 'Terça-feira' },
     { id: 2, name: 'Quarta-feira' },
     { id: 3, name: 'Quinta-feira' },
@@ -108,8 +108,6 @@ export class SettingsComponent implements OnInit {
       
       this.http.get<any[]>(`${environment.apiUrl}/working-hours/professional/${this.currentProfessional.id}`).subscribe({
           next: (hours) => {
-              // Map backend hours to form
-              // This logic depends on backend response structure.
               hours.forEach(hour => {
                  const control = this.hoursArray.controls.find(c => c.value.dayId === hour.day_of_week);
                  if (control) {
