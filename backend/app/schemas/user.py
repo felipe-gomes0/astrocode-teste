@@ -30,9 +30,13 @@ class UserInDBBase(UserBase):
 
     model_config = ConfigDict(from_attributes=True)
 
-# Additional properties to return via API
+# Properties to return via API
+class ProfessionalInUser(BaseModel):
+    id: int
+    speciality: Optional[str] = None
+    
 class User(UserInDBBase):
-    pass
+    professional: Optional[ProfessionalInUser] = None
 
 # Additional properties stored in DB
 class UserInDB(UserInDBBase):

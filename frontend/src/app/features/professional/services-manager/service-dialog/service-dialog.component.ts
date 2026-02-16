@@ -94,10 +94,10 @@ export class ServiceDialogComponent {
     });
 
     // Get current professional ID
+    // Get current professional ID
     this.authService.currentUser.subscribe(user => {
-         const u: any = user;
-         if (u && u.professional) {
-             this.currentProfessionalId = u.professional.id;
+         if (user && user.type === 'professional' && user.professional) {
+             this.currentProfessionalId = user.professional.id;
          }
     });
   }

@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { AuthGuard } from './core/guards/auth.guard';
+import { roleGuard } from './core/guards/role.guard';
 import { LoginComponent } from './login/login';
 
 // Client Components
@@ -36,7 +37,8 @@ export const routes: Routes = [
     // Professional Routes
     {
         path: 'professional',
-        canActivate: [AuthGuard],
+        canActivate: [AuthGuard, roleGuard],
+        data: { role: 'professional' },
         children: [
             { path: 'dashboard', component: DashboardComponent },
             { path: 'services', component: ServicesManagerComponent },

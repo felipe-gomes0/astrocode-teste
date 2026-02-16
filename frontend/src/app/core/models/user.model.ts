@@ -12,6 +12,10 @@ export interface User {
   active: boolean;
   created_at: string;
   updated_at: string;
+  professional?: {
+      id: number;
+      speciality?: string;
+  };
 }
 
 export interface LoginCredentials {

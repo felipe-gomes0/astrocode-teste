@@ -53,7 +53,7 @@ import { BlockService } from '../../../core/services/block.service';
                </mat-form-field>
             </div>
 
-            <button mat-raised-button color="warn" type="submit" [disabled]="blockForm.invalid || loading">
+            <button mat-raised-button color="warn" type="submit">
               Bloquear Horário
             </button>
           </form>
@@ -125,9 +125,8 @@ export class BlockManagerComponent implements OnInit {
 
   ngOnInit(): void {
     this.authService.currentUser.subscribe(user => {
-      const u: any = user;
-      if (u && u.professional) {
-        this.currentProfessionalId = u.professional.id;
+      if (user && user.type === 'professional' && user.professional) {
+        this.currentProfessionalId = user.professional.id;
         this.loadBlocks();
       }
     });
@@ -142,7 +141,19 @@ export class BlockManagerComponent implements OnInit {
   }
 
   addBlock(): void {
-    if (this.blockForm.invalid || !this.currentProfessionalId) return;
+    if (this.loading) return;
+
+    if (this.blockForm.invalid) {
+        if (this.blockForm.get('reason')?.hasError('required')) alert('O motivo é obrigatório');
+        else if (this.blockForm.get('start')?.hasError('required')) alert('Data inicial é obrigatória');
+        else if (this.blockForm.get('end')?.hasError('required')) alert('Data final é obrigatória');
+        return;
+    }
+
+    if (!this.currentProfessionalId) {
+        alert('Erro: Profissional não identificado');
+        return;
+    }
     
     this.loading = true;
     const val = this.blockForm.value;

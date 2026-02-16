@@ -36,10 +36,8 @@ export class ServicesManagerComponent implements OnInit {
 
   ngOnInit(): void {
     this.authService.currentUser.subscribe(user => {
-         // Cast to access professional id
-         const u: any = user;
-         if (u && u.professional && u.professional.id) {
-             this.loadServices(u.professional.id);
+         if (user && user.type === 'professional' && user.professional) {
+             this.loadServices(user.professional.id);
          }
     });
   }
@@ -61,8 +59,9 @@ export class ServicesManagerComponent implements OnInit {
       if (result) {
          // Reload list
          this.authService.currentUser.subscribe(user => {
-             const u: any = user;
-             if (u && u.professional) this.loadServices(u.professional.id);
+             if (user && user.type === 'professional' && user.professional) {
+                 this.loadServices(user.professional.id);
+             }
          });
       }
     });
@@ -73,8 +72,9 @@ export class ServicesManagerComponent implements OnInit {
         this.serviceManagementService.deleteService(service.id).subscribe(() => {
             // Reload services. Need to store current prof ID.
             this.authService.currentUser.subscribe(user => {
-                const u: any = user;
-                 if (u && u.professional) this.loadServices(u.professional.id);
+                 if (user && user.type === 'professional' && user.professional) {
+                     this.loadServices(user.professional.id);
+                 }
             });
         });
     }
