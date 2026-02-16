@@ -46,11 +46,11 @@
             mat-flat-button
             color="primary"
             type="submit"
-            [disabled]="loginForm.invalid || isLoading"
+            [disabled]="loginForm.invalid || (loadingService.loading$ | async)"
             class="full-width"
           >
-            <span *ngIf="!isLoading">Entrar</span>
-            <mat-spinner diameter="20" *ngIf="isLoading"></mat-spinner>
+            <span *ngIf="!(loadingService.loading$ | async)">Entrar</span>
+            <mat-spinner diameter="20" *ngIf="(loadingService.loading$ | async)"></mat-spinner>
           </button>
         </div>
       </form>
