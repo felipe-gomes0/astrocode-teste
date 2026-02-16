@@ -1,0 +1,30 @@
+<h2 mat-dialog-title>{{ isEdit ? 'Editar Serviço' : 'Novo Serviço' }}</h2>
+<mat-dialog-content>
+  <form [formGroup]="serviceForm">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Nome do Serviço</mat-label>
+      <input matInput formControlName="name" placeholder="Ex: Corte de Cabelo">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Descrição</mat-label>
+      <textarea matInput formControlName="description" rows="3"></textarea>
+    </mat-form-field>
+
+    <div class="row">
+        <mat-form-field appearance="outline">
+            <mat-label>Duração (minutos)</mat-label>
+            <input matInput type="number" formControlName="duration">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Preço (R$)</mat-label>
+            <input matInput type="number" formControlName="price">
+        </mat-form-field>
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancelar</button>
+  <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="!serviceForm.valid">Salvar</button>
+</mat-dialog-actions>
