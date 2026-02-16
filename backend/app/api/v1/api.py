@@ -6,7 +6,8 @@ from app.api.v1.endpoints import (
     appointments,
     clients,
     reviews,
-    users
+    users,
+    working_hours
 )
 
 api_router = APIRouter()
@@ -17,4 +18,5 @@ api_router.include_router(services.router, prefix="/services", tags=["services"]
 api_router.include_router(appointments.router, prefix="/appointments", tags=["appointments"])
 api_router.include_router(clients.router, prefix="/clients", tags=["clients"])
 api_router.include_router(reviews.router, prefix="/reviews", tags=["reviews"])
+api_router.include_router(working_hours.router, prefix="/working-hours", tags=["working_hours"])
 

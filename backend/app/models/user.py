@@ -24,5 +24,7 @@ class User(Base):
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     
     professional = relationship("Professional", back_populates="user", uselist=False)
+    # Import inside method or use string to avoid circular import if needed, but string is already used.
+    # Just ensure Appointment is imported in base or available in registry
     appointments_as_client = relationship("Appointment", foreign_keys="Appointment.client_id", back_populates="client")
     reviews = relationship("Review", back_populates="client")
