@@ -6,7 +6,9 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { Service } from '../../../core/models/service.model';
+import { AuthService } from '../../../core/services/auth.service';
 import { ServiceManagementService } from '../services/service-management.service';
+import { ServiceDialogComponent } from './service-dialog/service-dialog.component';
 
 @Component({
   selector: 'app-services-manager',
@@ -26,35 +28,54 @@ export class ServicesManagerComponent implements OnInit {
   private serviceManagementService = inject(ServiceManagementService);
   private dialog = inject(MatDialog);
 
+  // Injected mainly for ID access
+  private authService = inject(AuthService);
+  
   services: Service[] = [];
   displayedColumns: string[] = ['name', 'duration', 'price', 'actions'];
 
   ngOnInit(): void {
-    this.loadServices();
+    this.authService.currentUser.subscribe(user => {
+         // Cast to access professional id
+         const u: any = user;
+         if (u && u.professional && u.professional.id) {
+             this.loadServices(u.professional.id);
+         }
+    });
   }
 
-  loadServices(): void {
-    // We need to get professional ID from auth user first in a real app
-    // For now assuming the service handles "my services" or we pass ID
-    // The service-management service likely needs a 'getMyServices' method
-    // Or we fetch current user's professional ID.
-    
-    // Placeholder implementation
-    /*
-    this.serviceManagementService.getMyServices().subscribe(services => {
-        this.services = services;
-    });
-    */
+  loadServices(professionalId?: number): void {
+      if (!professionalId) return;
+      this.serviceManagementService.getServicesByProfessional(professionalId).subscribe(services => {
+          this.services = services;
+      });
   }
 
   openServiceDialog(service?: Service): void {
-    // Open dialog logic
+    const dialogRef = this.dialog.open(ServiceDialogComponent, {
+      width: '500px',
+      data: service || null
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+         // Reload list
+         this.authService.currentUser.subscribe(user => {
+             const u: any = user;
+             if (u && u.professional) this.loadServices(u.professional.id);
+         });
+      }
+    });
   }
 
   deleteService(service: Service): void {
     if(confirm('Tem certeza que deseja excluir este serviço?')) {
         this.serviceManagementService.deleteService(service.id).subscribe(() => {
-            this.loadServices();
+            // Reload services. Need to store current prof ID.
+            this.authService.currentUser.subscribe(user => {
+                const u: any = user;
+                 if (u && u.professional) this.loadServices(u.professional.id);
+            });
         });
     }
   }

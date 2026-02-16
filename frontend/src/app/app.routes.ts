@@ -14,6 +14,10 @@ import { SettingsComponent } from './features/professional/settings/settings.com
 
 export const routes: Routes = [
     { path: 'login', component: LoginComponent },
+    { 
+        path: 'register', 
+        loadComponent: () => import('./features/common/register/register.component').then(m => m.RegisterComponent) 
+    },
     
     // Public Client Routes
     { path: 'client/search', component: SearchComponent },
@@ -36,6 +40,10 @@ export const routes: Routes = [
         children: [
             { path: 'dashboard', component: DashboardComponent },
             { path: 'services', component: ServicesManagerComponent },
+            { 
+                path: 'blocks', 
+                loadComponent: () => import('./features/professional/block-manager/block-manager.component').then(m => m.BlockManagerComponent) 
+            },
             { path: 'settings', component: SettingsComponent },
             { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
         ]

@@ -14,7 +14,7 @@ from app.schemas.user import User as UserSchema, UserCreate, UserUpdate
 router = APIRouter()
 
 from app.api import deps
-from app.models.user import User
+from app.models.user import User, UserType
 
 @router.get("/me", response_model=UserSchema)
 def read_user_me(
@@ -60,6 +60,15 @@ def create_user(
             detail="The user with this username already exists in the system.",
         )
     user = crud_user.create(db, obj_in=user_in)
+    
+    # Automatically create Professional record if user type is PROFESSIONAL
+    if user.type == "professional" or user.type == UserType.PROFESSIONAL:
+        from app.models.professional import Professional
+        professional = Professional(user_id=user.id)
+        db.add(professional)
+        db.commit()
+        db.refresh(professional)
+        
     return user
 
 

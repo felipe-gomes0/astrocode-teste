@@ -1,4 +1,5 @@
 import { CommonModule } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, inject } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -8,11 +9,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTabsModule } from '@angular/material/tabs';
-import { ProfessionalService } from '../../professional/services/professional.service';
+import { environment } from '../../../../environments/environment';
 import { Professional } from '../../../core/models/professional.model';
 import { AuthService } from '../../../core/services/auth.service';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../../environments/environment';
+import { ProfessionalService } from '../../professional/services/professional.service';
 
 @Component({
   selector: 'app-settings',
@@ -111,12 +111,12 @@ export class SettingsComponent implements OnInit {
               // Map backend hours to form
               // This logic depends on backend response structure.
               hours.forEach(hour => {
-                 const control = this.hoursArray.controls.find(c => c.value.dayId === hour.dia_semana);
+                 const control = this.hoursArray.controls.find(c => c.value.dayId === hour.day_of_week);
                  if (control) {
                      control.patchValue({
-                         active: hour.ativo,
-                         start: hour.hora_inicio,
-                         end: hour.hora_fim
+                         active: hour.active,
+                         start: hour.start_time,
+                         end: hour.end_time
                      });
                  }
               });
@@ -137,31 +137,27 @@ export class SettingsComponent implements OnInit {
   updateWorkingHours(): void {
       if (!this.currentProfessional) return;
       
-      const requests = this.hoursArray.controls
-        .filter(c => c.dirty) // Only update changed
-        .map(c => {
-            const val = c.value;
-            const payload = {
-                professional_id: this.currentProfessional!.id,
-                dia_semana: val.dayId,
-                hora_inicio: val.start,
-                hora_fim: val.end,
-                ativo: val.active
-            };
-            return this.http.post(`${environment.apiUrl}/working-hours/`, payload);
-        });
+      const payload = this.hoursArray.controls.map(c => {
+          const val = c.value;
+          return {
+              professional_id: this.currentProfessional!.id,
+              day_of_week: val.dayId,
+              start_time: val.start,
+              end_time: val.end,
+              active: val.active
+          };
+      });
 
-      if (requests.length === 0) {
-          this.snackBar.open('Nenhuma alteração para salvar.', 'Fechar', { duration: 3000 });
-          return;
-      }
-
-      let completed = 0;
-      requests.forEach(obs => obs.subscribe(() => {
-          completed++;
-          if (completed === requests.length) {
+      this.http.post(`${environment.apiUrl}/working-hours/batch`, payload).subscribe({
+          next: () => {
               this.snackBar.open('Horários atualizados!', 'Fechar', { duration: 3000 });
+              // Mark as pristine
+              this.workingHoursForm.markAsPristine();
+          },
+          error: (err) => {
+              console.error(err);
+              this.snackBar.open('Erro ao atualizar horários.', 'Fechar', { duration: 3000 });
           }
-      }));
+      });
   }
 }

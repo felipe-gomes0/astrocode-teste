@@ -57,6 +57,10 @@ export class AuthService {
       );
   }
 
+  register(user: Partial<User>): Observable<User> {
+      return this.http.post<User>(`${environment.apiUrl}/users/`, user);
+  }
+
   fetchCurrentUser(): Observable<User> {
     return this.http.get<User>(`${environment.apiUrl}/users/me`).pipe(
       tap(user => {
