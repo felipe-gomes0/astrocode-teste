@@ -30,7 +30,11 @@ export class AuthService {
     const token = localStorage.getItem('token');
     if (token) {
       this.fetchCurrentUser().subscribe({
-          error: () => this.logout() // Invalid token
+          error: (err) => {
+              if (err.status === 401) {
+                  this.logout();
+              }
+          }
       });
     }
   }
