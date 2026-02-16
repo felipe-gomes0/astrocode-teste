@@ -1,2 +1,50 @@
+<<<<<<< Updated upstream
 <!-- Main Layout -->
 <router-outlet />
+=======
+<div class="app-container">
+  <mat-toolbar color="primary" class="navbar">
+    <span class="logo" routerLink="/">AstroCode</span>
+    <span class="spacer"></span>
+    
+    <div class="nav-links">
+      <ng-container *ngIf="(user$ | async) as user; else guestLinks">
+        <!-- Logged In Links -->
+        
+        <!-- Professional Links -->
+        <ng-container *ngIf="user.type === UserType.PROFESSIONAL">
+          <a mat-button routerLink="/client/search" routerLinkActive="active">Buscar Profissionais</a>
+          <a mat-button routerLink="/professional/dashboard" routerLinkActive="active">Painel Profissional</a>
+          <a mat-button routerLink="/professional/services" routerLinkActive="active">Meus Serviços</a>
+        </ng-container>
+
+        <!-- Common Logged In User Actions -->
+        <button mat-icon-button [matMenuTriggerFor]="userMenu">
+          <mat-icon>account_circle</mat-icon>
+        </button>
+        <mat-menu #userMenu="matMenu">
+          <button mat-menu-item disabled>
+            <mat-icon>person</mat-icon>
+            <span>{{ user.name }}</span>
+          </button>
+          <button mat-menu-item (click)="logout()">
+            <mat-icon>logout</mat-icon>
+            <span>Sair</span>
+          </button>
+        </mat-menu>
+      </ng-container>
+
+      <ng-template #guestLinks>
+        <!-- Guest Links -->
+        <a mat-button routerLink="/client/search" routerLinkActive="active">Buscar Profissionais</a>
+        <a mat-button routerLink="/login" routerLinkActive="active">Login</a>
+        <a mat-raised-button color="accent" routerLink="/register">Cadastrar</a>
+      </ng-template>
+    </div>
+  </mat-toolbar>
+
+  <main class="main-content">
+    <router-outlet></router-outlet>
+  </main>
+</div>
+>>>>>>> Stashed changes

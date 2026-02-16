@@ -1,0 +1,56 @@
+.booking-container {
+  padding: 24px;
+  display: flex;
+  justify-content: center;
+}
+
+.booking-card {
+  max-width: 600px;
+  width: 100%;
+}
+
+.professional-info {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 24px;
+
+  img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.slots-container {
+  margin-bottom: 24px;
+  
+  label {
+    display: block;
+    margin-bottom: 8px;
+    color: #666;
+    font-size: 14px;
+  }
+}
+
+.no-slots {
+  text-align: center;
+  color: #f44336;
+  margin-bottom: 24px;
+  padding: 16px;
+  background-color: #ffebee;
+  border-radius: 4px;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  margin-top: 24px;
+}
