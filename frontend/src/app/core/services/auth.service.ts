@@ -1,18 +1,10 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { map, switchMap, tap } from 'rxjs/operators';
+import { switchMap, tap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
-import { StorageService } from './storage.service';
-
-export interface User {
-  id: number;
-  email: string;
-  nome: string;
-  tipo: 'professional' | 'client';
-  telefone?: string;
-}
+import { LoginCredentials, User } from '../models/user.model';
 
 interface LoginResponse {
   access_token: string;
@@ -23,82 +15,63 @@ interface LoginResponse {
   providedIn: 'root'
 })
 export class AuthService {
-  private currentUserSubject = new BehaviorSubject<User | null>(null);
-  public currentUser$ = this.currentUserSubject.asObservable();
-  
-  public isAuthenticated$ = this.currentUser$.pipe(
-    map(user => !!user)
-  );
+  private http = inject(HttpClient);
+  private router = inject(Router);
+  private apiUrl = `${environment.apiUrl}/auth`;
 
-  constructor(
-    private http: HttpClient,
-    private router: Router,
-    private storageService: StorageService
-  ) {
+  private currentUserSubject = new BehaviorSubject<User | null>(null);
+  public currentUser = this.currentUserSubject.asObservable();
+
+  constructor() {
     this.loadUserFromStorage();
   }
 
   private loadUserFromStorage(): void {
-    const user = this.storageService.getUser();
-    if (user) {
-      this.currentUserSubject.next(user);
+    const token = localStorage.getItem('token');
+    if (token) {
+      this.fetchCurrentUser().subscribe({
+          error: () => this.logout() // Invalid token
+      });
     }
   }
 
-  login(email: string, password: string): Observable<User> {
+  login(credentials: LoginCredentials): Observable<User> {
     const body = new URLSearchParams();
-    body.set('username', email);
-    body.set('password', password);
+    body.set('username', credentials.email);
+    body.set('password', credentials.password);
 
-    const headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/x-www-form-urlencoded'
+    });
 
-    return this.http.post<LoginResponse>(
-      `${environment.apiUrl}/auth/access-token`,
-      body.toString(),
-      { headers }
-    ).pipe(
-      tap(response => {
-        this.storageService.setToken(response.access_token);
-      }),
-      switchMap(() => this.http.get<User>(`${environment.apiUrl}/users/me`)),
-      tap({
-        next: (user) => {
-          this.currentUserSubject.next(user);
-          this.storageService.setUser(user);
-        },
-        error: () => {
-          this.logout();
-        }
+    return this.http.post<LoginResponse>(`${this.apiUrl}/access-token`, body.toString(), { headers })
+      .pipe(
+        tap(response => {
+          localStorage.setItem('token', response.access_token);
+        }),
+        switchMap(() => this.fetchCurrentUser())
+      );
+  }
+
+  fetchCurrentUser(): Observable<User> {
+    return this.http.get<User>(`${environment.apiUrl}/users/me`).pipe(
+      tap(user => {
+        this.currentUserSubject.next(user);
       })
     );
   }
 
-  register(userData: any): Observable<User> {
-    return this.http.post<User>(
-      `${environment.apiUrl}/auth/register`,
-      userData
-    );
-  }
-
   logout(): void {
-    this.storageService.clear();
+    localStorage.removeItem('token');
     this.currentUserSubject.next(null);
-    this.router.navigate(['/login']); // Adjusted route
+    this.router.navigate(['/login']);
   }
 
-  private loadCurrentUser(): void {
-    this.http.get<User>(`${environment.apiUrl}/users/me`).subscribe({
-      next: (user) => {
-        this.currentUserSubject.next(user);
-        this.storageService.setUser(user);
-      },
-      error: () => {
-        this.logout();
-      }
-    });
+  get isLoggedIn(): boolean {
+    return !!localStorage.getItem('token');
   }
 
-  getCurrentUser(): User | null {
-    return this.currentUserSubject.value;
+  getToken(): string | null {
+      return localStorage.getItem('token');
   }
 }
