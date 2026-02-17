@@ -18,7 +18,6 @@ class BlockBase(BaseModel):
 class BlockCreate(BlockBase):
     professional_id: int
 
-    @model_validator(mode='after')
     def validate_future(self) -> 'BlockCreate':
         if self.start_time < datetime.now(timezone.utc):
              raise ValueError('Cannot block past times')

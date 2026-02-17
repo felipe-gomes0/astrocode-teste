@@ -16,7 +16,7 @@ export class BlockService {
   }
 
   createBlock(block: Partial<Block>): Observable<Block> {
-    return this.http.post<Block>(this.apiUrl, block);
+    return this.http.post<Block>(`${this.apiUrl}/`, block);
   }
 
   deleteBlock(id: number): Observable<void> {
