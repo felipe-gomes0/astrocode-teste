@@ -6,6 +6,7 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Service } from '../../../../core/models/service.model';
 import { AuthService } from '../../../../core/services/auth.service';
 import { ServiceManagementService } from '../../services/service-management.service';
@@ -20,7 +21,8 @@ import { ServiceManagementService } from '../../services/service-management.serv
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    MatSnackBarModule
   ],
   template: `
     <h2 mat-dialog-title>{{ isEdit ? 'Editar Serviço' : 'Novo Serviço' }}</h2>
@@ -74,6 +76,7 @@ export class ServiceDialogComponent {
   private fb = inject(FormBuilder);
   private serviceService = inject(ServiceManagementService);
   private authService = inject(AuthService); // Need auth to get professional ID for create
+  private snackBar = inject(MatSnackBar);
 
   serviceForm: FormGroup;
   isEdit: boolean;
@@ -118,16 +121,16 @@ export class ServiceDialogComponent {
           this.loading = false;
           console.error(err);
           if (err.status === 404) {
-            alert('Serviço não encontrado. Ele pode ter sido excluído.');
+            this.snackBar.open('Serviço não encontrado. Ele pode ter sido excluído.', 'Fechar', { duration: 3000 });
             this.dialogRef.close(); // Close dialog as service is gone
           } else {
-            alert('Erro ao atualizar serviço: ' + (err.error?.detail || 'Erro desconhecido'));
+            this.snackBar.open('Erro ao atualizar serviço: ' + (err.error?.detail || 'Erro desconhecido'), 'Fechar', { duration: 3000 });
           }
         }
       });
     } else {
       if (!this.currentProfessionalId) {
-          alert('Erro: Profissional não identificado');
+          this.snackBar.open('Erro: Profissional não identificado', 'Fechar', { duration: 3000 });
           this.loading = false;
           return;
       }
@@ -145,7 +148,7 @@ export class ServiceDialogComponent {
         error: (err: any) => {
           this.loading = false;
           console.error(err);
-          alert('Erro ao criar serviço');
+          this.snackBar.open('Erro ao criar serviço', 'Fechar', { duration: 3000 });
         }
       });
     }

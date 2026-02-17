@@ -1,5 +1,5 @@
 from typing import Optional
-from datetime import datetime
+from datetime import datetime, timezone
 from pydantic import BaseModel, ConfigDict, model_validator
 
 # Shared properties
@@ -12,19 +12,6 @@ class BlockBase(BaseModel):
     def validate_times(self) -> 'BlockBase':
         if self.start_time >= self.end_time:
             raise ValueError('End time must be after start time')
-        
-        # Validation for future dates (unless editing an old one, but usually blocking is for future)
-        # However, blocking past dates might be valid for record keeping?
-        # Requirement says: "Não pode bloquear horários no passado"
-        # So we validate start_time > now
-        if self.start_time < datetime.now():
-             # We might want to allow a small buffer or just strictly future
-             # But if I am editing a block that started 1 minute ago, this might fail.
-             # Let's assume strict for creation.
-             pass 
-             # Actually, Pydantic validation runs on every model creation. 
-             # If we fetch from DB, we don't want this validation to fail.
-             # So we should put this in Create schema or check context.
         return self
 
 # Properties to receive via API on creation
@@ -33,7 +20,7 @@ class BlockCreate(BlockBase):
 
     @model_validator(mode='after')
     def validate_future(self) -> 'BlockCreate':
-        if self.start_time < datetime.now():
+        if self.start_time < datetime.now(timezone.utc):
              raise ValueError('Cannot block past times')
         return self
 

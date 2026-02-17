@@ -10,6 +10,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Router } from '@angular/router';
 import { AuthService } from '../core/services/auth.service';
 
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { LoadingService } from '../core/services/loading.service';
 
 @Component({
@@ -24,7 +25,8 @@ import { LoadingService } from '../core/services/loading.service';
     MatButtonModule,
     MatFormFieldModule,
     MatIconModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatSnackBarModule
   ],
   templateUrl: './login.html',
   styleUrl: './login.scss',
@@ -34,6 +36,7 @@ export class LoginComponent {
   private authService = inject(AuthService);
   private router = inject(Router);
   public loadingService = inject(LoadingService);
+  private snackBar = inject(MatSnackBar);
 
   loginForm: FormGroup;
   hidePassword = true;
@@ -71,7 +74,8 @@ export class LoginComponent {
         },
         error: (err: any) => {
           this.isLoading = false;
-          this.errorMessage = 'Senha ou email inválidos';
+          // this.errorMessage = 'Senha ou email inválidos'; // Remove simple error message
+          this.snackBar.open('Senha ou email inválidos', 'Fechar', { duration: 3000 });
         }
       });
     }

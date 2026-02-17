@@ -7,6 +7,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Router, RouterModule } from '@angular/router';
 import { UserType } from '../../../core/models/user.model';
 import { AuthService } from '../../../core/services/auth.service';
@@ -23,7 +24,8 @@ import { AuthService } from '../../../core/services/auth.service';
     MatInputModule,
     MatSelectModule,
     MatRadioModule,
-    RouterModule
+    RouterModule,
+    MatSnackBarModule
   ],
   template: `
     <div class="register-container">
@@ -119,6 +121,7 @@ export class RegisterComponent {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
+  private snackBar = inject(MatSnackBar);
 
   registerForm: FormGroup;
   loading = false;
@@ -150,14 +153,14 @@ export class RegisterComponent {
     this.authService.register(userData).subscribe({
       next: () => {
         this.loading = false;
-        alert('Cadastro realizado com sucesso! Faça login.');
+        this.snackBar.open('Cadastro realizado com sucesso! Faça login.', 'Fechar', { duration: 3000 });
         this.router.navigate(['/login']);
       },
       error: (err) => {
         this.loading = false;
         console.error(err);
         const msg = err.error?.detail || 'Erro ao cadastrar';
-        alert(msg);
+        this.snackBar.open(msg, 'Fechar', { duration: 3000 });
       }
     });
   }

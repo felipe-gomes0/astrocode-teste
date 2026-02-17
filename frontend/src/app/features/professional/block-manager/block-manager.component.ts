@@ -8,6 +8,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTableModule } from '@angular/material/table';
 import { Block } from '../../../core/models/block.model';
 import { AuthService } from '../../../core/services/auth.service';
@@ -26,7 +27,8 @@ import { BlockService } from '../../../core/services/block.service';
     MatTableModule,
     MatIconModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatSnackBarModule
   ],
   template: `
     <div class="container p-4">
@@ -41,15 +43,33 @@ import { BlockService } from '../../../core/services/block.service';
               <input matInput formControlName="reason" placeholder="Ex: Férias, Médico">
             </mat-form-field>
             
+            <!-- Start -->
             <div class="flex gap-4">
-               <mat-form-field appearance="outline">
-                 <mat-label>Início</mat-label>
-                 <input matInput type="datetime-local" formControlName="start">
+              <mat-form-field appearance="outline" class="flex-1">
+                <mat-label>Data Início</mat-label>
+                <input matInput [matDatepicker]="pickerStart" formControlName="startDate">
+                <mat-datepicker-toggle matIconSuffix [for]="pickerStart"></mat-datepicker-toggle>
+                <mat-datepicker #pickerStart></mat-datepicker>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="w-32">
+                <mat-label>Hora Início</mat-label>
+                <input matInput type="time" formControlName="startTime">
+              </mat-form-field>
+            </div>
+
+            <!-- End -->
+            <div class="flex gap-4">
+               <mat-form-field appearance="outline" class="flex-1">
+                 <mat-label>Data Fim</mat-label>
+                 <input matInput [matDatepicker]="pickerEnd" formControlName="endDate">
+                 <mat-datepicker-toggle matIconSuffix [for]="pickerEnd"></mat-datepicker-toggle>
+                 <mat-datepicker #pickerEnd></mat-datepicker>
                </mat-form-field>
 
-               <mat-form-field appearance="outline">
-                 <mat-label>Fim</mat-label>
-                 <input matInput type="datetime-local" formControlName="end">
+               <mat-form-field appearance="outline" class="w-32">
+                 <mat-label>Hora Fim</mat-label>
+                 <input matInput type="time" formControlName="endTime">
                </mat-form-field>
             </div>
 
@@ -100,6 +120,8 @@ import { BlockService } from '../../../core/services/block.service';
     .flex { display: flex; }
     .flex-col { flex-direction: column; }
     .gap-4 { gap: 1rem; }
+    .flex-1 { flex: 1; }
+    .w-32 { width: 8rem; }
     .mb-4 { margin-bottom: 1rem; }
     .pt-4 { padding-top: 1rem; }
   `]
@@ -108,6 +130,7 @@ export class BlockManagerComponent implements OnInit {
   private fb = inject(FormBuilder);
   private blockService = inject(BlockService);
   private authService = inject(AuthService);
+  private snackBar = inject(MatSnackBar);
 
   blockForm: FormGroup;
   blocks: Block[] = [];
@@ -117,9 +140,11 @@ export class BlockManagerComponent implements OnInit {
 
   constructor() {
     this.blockForm = this.fb.group({
-      reason: ['', Validators.required],
-      start: ['', Validators.required],
-      end: ['', Validators.required]
+      reason: [''], // Optional
+      startDate: ['', Validators.required],
+      startTime: ['', Validators.required],
+      endDate: ['', Validators.required],
+      endTime: ['', Validators.required]
     });
   }
 
@@ -144,46 +169,60 @@ export class BlockManagerComponent implements OnInit {
     if (this.loading) return;
 
     if (this.blockForm.invalid) {
-        if (this.blockForm.get('reason')?.hasError('required')) alert('O motivo é obrigatório');
-        else if (this.blockForm.get('start')?.hasError('required')) alert('Data inicial é obrigatória');
-        else if (this.blockForm.get('end')?.hasError('required')) alert('Data final é obrigatória');
+        if (this.blockForm.get('startDate')?.hasError('required')) this.snackBar.open('Data inicial é obrigatória', 'Fechar', { duration: 3000 });
+        else if (this.blockForm.get('startTime')?.hasError('required')) this.snackBar.open('Hora inicial é obrigatória', 'Fechar', { duration: 3000 });
+        else if (this.blockForm.get('endDate')?.hasError('required')) this.snackBar.open('Data final é obrigatória', 'Fechar', { duration: 3000 });
+        else if (this.blockForm.get('endTime')?.hasError('required')) this.snackBar.open('Hora final é obrigatória', 'Fechar', { duration: 3000 });
         return;
     }
 
     if (!this.currentProfessionalId) {
-        alert('Erro: Profissional não identificado');
+        this.snackBar.open('Erro: Profissional não identificado', 'Fechar', { duration: 3000 });
         return;
     }
     
     this.loading = true;
     const val = this.blockForm.value;
     
+    // Combine Date and Time
+    const start = this.combineDateTime(val.startDate, val.startTime);
+    const end = this.combineDateTime(val.endDate, val.endTime);
+    
     // Simple validation
-    if (new Date(val.start) >= new Date(val.end)) {
-        alert('Data final deve ser maior que data inicial');
+    if (start >= end) {
+        this.snackBar.open('Data final deve ser maior que data inicial', 'Fechar', { duration: 3000 });
         this.loading = false;
         return;
     }
 
     const newBlock = {
       professional_id: this.currentProfessionalId,
-      start_time: val.start,
-      end_time: val.end,
+      start_time: start.toISOString(),
+      end_time: end.toISOString(),
       reason: val.reason
     };
 
     this.blockService.createBlock(newBlock).subscribe({
       next: (res) => {
         this.loading = false;
-        this.blocks.push(res); // or reload
+        this.blocks.push(res); 
         this.blockForm.reset();
+        this.snackBar.open('Horário bloqueado com sucesso!', 'Fechar', { duration: 3000 });
       },
       error: (err) => {
         this.loading = false;
         console.error(err);
-        alert('Erro ao criar bloqueio: ' + (err.error?.detail || 'Erro desconhecido'));
+        this.snackBar.open('Erro ao criar bloqueio: ' + (err.error?.detail || 'Erro desconhecido'), 'Fechar', { duration: 3000 });
       }
     });
+  }
+
+  private combineDateTime(date: Date, time: string): Date {
+      const combined = new Date(date);
+      const [hours, minutes] = time.split(':').map(Number);
+      combined.setHours(hours);
+      combined.setMinutes(minutes);
+      return combined;
   }
 
   deleteBlock(block: Block): void {
