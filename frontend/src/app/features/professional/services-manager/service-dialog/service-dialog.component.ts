@@ -97,7 +97,6 @@ export class ServiceDialogComponent {
     });
 
     // Get current professional ID
-    // Get current professional ID
     this.authService.currentUser.subscribe(user => {
          if (user && user.type === 'professional' && user.professional) {
              this.currentProfessionalId = user.professional.id;
