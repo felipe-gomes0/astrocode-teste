@@ -235,12 +235,15 @@
   }
 
   .mini-delete-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 2rem;
     height: 2rem;
     line-height: 2rem;
     color: $gray-400;
     
-    mat-icon { font-size: $font-size-xl; }
+    mat-icon { font-size: $font-size-md; }
 
     &:hover { color: $primary-color; }
   }
