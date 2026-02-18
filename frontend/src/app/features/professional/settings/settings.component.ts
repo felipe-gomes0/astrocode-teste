@@ -85,9 +85,18 @@ export class SettingsComponent implements OnInit {
     this.authService.currentUser.subscribe(user => {
         const userWithProf = user as any; 
         if (userWithProf?.professional?.id) {
-            this.currentProfessional = userWithProf.professional;
-            this.loadProfile();
-            this.loadWorkingHours();
+            // Fetch fresh professional data from backend to ensure form is populated correctly
+            this.professionalService.getProfessional(userWithProf.professional.id).subscribe({
+                next: (prof) => {
+                    this.currentProfessional = prof;
+                    this.loadProfile();
+                    this.loadWorkingHours();
+                },
+                error: (err) => {
+                    console.error('Erro ao carregar dados do profissional:', err);
+                    this.snackBar.open('Erro ao carregar perfil.', 'Fechar', { duration: 3000 });
+                }
+            });
         }
     });
   }
@@ -127,6 +136,11 @@ export class SettingsComponent implements OnInit {
         this.professionalService.updateProfessional(this.currentProfessional.id, this.profileForm.value).subscribe({
             next: () => {
                 this.snackBar.open('Perfil atualizado!', 'Fechar', { duration: 3000 });
+            },
+            error: (err) => {
+                console.error('Erro ao atualizar perfil:', err);
+                const errorMessage = err.error?.detail || 'Erro ao atualizar perfil.';
+                this.snackBar.open(errorMessage, 'Fechar', { duration: 3000 });
             }
         });
     }
