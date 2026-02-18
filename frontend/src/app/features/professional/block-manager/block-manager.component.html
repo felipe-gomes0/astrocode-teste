@@ -111,7 +111,7 @@
             <div *ngIf="isBlockActiveOnDate(block, selectedDate)" 
                  class="mini-block-card">
               <div class="mini-card-time">
-                {{ block.start_time | date:'HH:mm' }} - {{ block.end_time | date:'HH:mm' }}
+                {{ block.start_time | date:'dd/MM HH:mm' }} - {{ block.end_time | date:'dd/MM HH:mm' }}
               </div>
               <div class="mini-card-reason">
                 {{ block.reason || 'Indisponível' }}

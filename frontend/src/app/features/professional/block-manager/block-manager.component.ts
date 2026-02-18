@@ -218,6 +218,8 @@ export class BlockManagerComponent implements OnInit {
     if (confirm('Deletar bloqueio?')) {
       this.blockService.deleteBlock(block.id).subscribe(() => {
         this.blocks = this.blocks.filter(b => b.id !== block.id);
+        this.updateDateClass();
+        this.calendar?.updateTodaysDate();
         this.snackBar.open('Bloqueio removido', 'Fechar', { duration: 3000 });
       });
     }
