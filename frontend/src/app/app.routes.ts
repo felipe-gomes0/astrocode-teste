@@ -14,22 +14,23 @@ import { ServicesManagerComponent } from './features/professional/services-manag
 import { SettingsComponent } from './features/professional/settings/settings.component';
 
 export const routes: Routes = [
-    { path: 'login', component: LoginComponent },
+    { path: 'login', component: LoginComponent, title: 'Login - AstroCode' },
     { 
         path: 'register', 
-        loadComponent: () => import('./features/common/register/register.component').then(m => m.RegisterComponent) 
+        loadComponent: () => import('./features/common/register/register.component').then(m => m.RegisterComponent),
+        title: 'Cadastro - AstroCode'
     },
     
     // Public Client Routes
-    { path: 'client/search', component: SearchComponent },
+    { path: 'client/search', component: SearchComponent, title: 'Buscar Profissionais - AstroCode' },
 
     // Protected Client Routes
     { 
         path: 'client',
         canActivate: [AuthGuard],
         children: [
-            { path: 'booking/:professionalId', component: BookingComponent },
-            { path: 'appointments', component: AppointmentsComponent },
+            { path: 'booking/:professionalId', component: BookingComponent, title: 'Agendamento - AstroCode' },
+            { path: 'appointments', component: AppointmentsComponent, title: 'Meus Agendamentos - AstroCode' },
             { path: '', redirectTo: 'search', pathMatch: 'full' }
         ]
     },
@@ -40,13 +41,14 @@ export const routes: Routes = [
         canActivate: [AuthGuard, roleGuard],
         data: { role: 'professional' },
         children: [
-            { path: 'dashboard', component: DashboardComponent },
-            { path: 'services', component: ServicesManagerComponent },
+            { path: 'dashboard', component: DashboardComponent, title: 'Dashboard - AstroCode' },
+            { path: 'services', component: ServicesManagerComponent, title: 'Gerenciar Serviços - AstroCode' },
             { 
                 path: 'blocks', 
-                loadComponent: () => import('./features/professional/block-manager/block-manager.component').then(m => m.BlockManagerComponent) 
+                loadComponent: () => import('./features/professional/block-manager/block-manager.component').then(m => m.BlockManagerComponent),
+                title: 'Gerenciar Bloqueios - AstroCode'
             },
-            { path: 'settings', component: SettingsComponent },
+            { path: 'settings', component: SettingsComponent, title: 'Configurações - AstroCode' },
             { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
         ]
     },
