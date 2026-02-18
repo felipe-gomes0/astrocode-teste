@@ -24,53 +24,8 @@ import { ServiceManagementService } from '../../services/service-management.serv
     MatSlideToggleModule,
     MatSnackBarModule
   ],
-  template: `
-    <h2 mat-dialog-title>{{ isEdit ? 'Editar Serviço' : 'Novo Serviço' }}</h2>
-    <mat-dialog-content>
-      <form [formGroup]="serviceForm">
-        <mat-form-field appearance="outline" class="w-full">
-          <mat-label>Nome do Serviço</mat-label>
-          <input matInput formControlName="name" placeholder="Ex: Consulta Médica">
-          <mat-error *ngIf="serviceForm.get('name')?.hasError('required')">Nome é obrigatório</mat-error>
-        </mat-form-field>
-
-        <mat-form-field appearance="outline" class="w-full">
-          <mat-label>Descrição</mat-label>
-          <textarea matInput formControlName="description" rows="3" placeholder="Ex: Detalhes do serviço..."></textarea>
-        </mat-form-field>
-
-        <div class="flex gap-4">
-          <mat-form-field appearance="outline" class="w-half">
-            <mat-label>Duração (min)</mat-label>
-            <input matInput type="number" formControlName="duration">
-            <mat-error *ngIf="serviceForm.get('duration')?.hasError('min')">Mínimo 15 minutos</mat-error>
-          </mat-form-field>
-
-          <mat-form-field appearance="outline" class="w-half">
-            <mat-label>Preço (R$)</mat-label>
-            <input matInput type="number" formControlName="price">
-            <mat-error *ngIf="serviceForm.get('price')?.hasError('min')">Preço deve ser positivo</mat-error>
-          </mat-form-field>
-        </div>
-
-        <div class="py-2">
-          <mat-slide-toggle formControlName="active">Ativo</mat-slide-toggle>
-        </div>
-      </form>
-    </mat-dialog-content>
-    <mat-dialog-actions align="end">
-      <button mat-button mat-dialog-close>Cancelar</button>
-      <button mat-raised-button color="primary" [disabled]="serviceForm.invalid || loading" (click)="save()">
-        {{ loading ? 'Salvando...' : 'Salvar' }}
-      </button>
-    </mat-dialog-actions>
-  `,
-  styles: [`
-    .w-full { width: 100%; }
-    .w-half { width: 48%; }
-    .flex { display: flex; }
-    .gap-4 { gap: 1rem; }
-  `]
+  templateUrl: './service-dialog.component.html',
+  styleUrl: './service-dialog.component.scss'
 })
 export class ServiceDialogComponent {
   private fb = inject(FormBuilder);
