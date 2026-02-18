@@ -59,20 +59,20 @@ export class AppointmentsComponent implements OnInit {
 
   getStatusColor(status: AppointmentStatus): string {
     const colors: Record<string, string> = {
-      [AppointmentStatus.PENDENTE]: 'warn',
-      [AppointmentStatus.CONFIRMADO]: 'primary',
-      [AppointmentStatus.CANCELADO]: 'accent',
-      [AppointmentStatus.CONCLUIDO]: 'accent'
+      [AppointmentStatus.PENDING]: 'warn',
+      [AppointmentStatus.CONFIRMED]: 'primary',
+      [AppointmentStatus.CANCELLED]: 'accent',
+      [AppointmentStatus.COMPLETED]: 'accent'
     };
     return colors[status] || 'primary';
   }
 
   getStatusLabel(status: AppointmentStatus): string {
     const labels: Record<string, string> = {
-      [AppointmentStatus.PENDENTE]: 'Pendente',
-      [AppointmentStatus.CONFIRMADO]: 'Confirmado',
-      [AppointmentStatus.CANCELADO]: 'Cancelado',
-      [AppointmentStatus.CONCLUIDO]: 'Concluído'
+      [AppointmentStatus.PENDING]: 'Pendente',
+      [AppointmentStatus.CONFIRMED]: 'Confirmado',
+      [AppointmentStatus.CANCELLED]: 'Cancelado',
+      [AppointmentStatus.COMPLETED]: 'Concluído'
     };
     return labels[status] || status;
   }
@@ -82,8 +82,8 @@ export class AppointmentsComponent implements OnInit {
     const now = new Date();
     const hoursUntilAppointment = (appointmentDate.getTime() - now.getTime()) / (1000 * 60 * 60);
     
-    return appointment.status !== AppointmentStatus.CANCELADO && 
-           appointment.status !== AppointmentStatus.CONCLUIDO &&
+    return appointment.status !== AppointmentStatus.CANCELLED && 
+           appointment.status !== AppointmentStatus.COMPLETED &&
            hoursUntilAppointment >= 24;
   }
 

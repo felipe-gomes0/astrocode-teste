@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -8,10 +8,12 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { format } from 'date-fns';
-import { switchMap } from 'rxjs/operators';
+import { forkJoin, of } from 'rxjs';
+import { catchError, distinctUntilChanged, finalize, switchMap, take, timeout } from 'rxjs/operators';
 import { AppointmentStatus } from '../../../core/models/appointment.model';
 import { Professional } from '../../../core/models/professional.model';
 import { Service } from '../../../core/models/service.model';
@@ -33,7 +35,8 @@ import { ServiceManagementService } from '../../professional/services/service-ma
     MatNativeDateModule,
     MatButtonModule,
     MatChipsModule,
-    MatInputModule
+    MatInputModule,
+    MatProgressSpinnerModule
   ],
   templateUrl: './booking.component.html',
   styleUrls: ['./booking.component.scss']
@@ -45,12 +48,15 @@ export class BookingComponent implements OnInit {
   private professionalService = inject(ProfessionalService);
   private serviceManagementService = inject(ServiceManagementService);
   private appointmentService = inject(AppointmentService);
+  private cdr = inject(ChangeDetectorRef);
 
   bookingForm: FormGroup;
   professional: Professional | null = null;
   services: Service[] = [];
   availableSlots: string[] = [];
   loading = false;
+  initialLoading = true;
+  error: string | null = null;
   selectedDate: Date | null = null;
   today = new Date();
 
@@ -66,24 +72,51 @@ export class BookingComponent implements OnInit {
   ngOnInit(): void {
     const professionalId = Number(this.route.snapshot.paramMap.get('professionalId'));
     if (professionalId) {
-      this.loadProfessional(professionalId);
-      this.loadServices(professionalId);
-      this.setupDateChange();
+      this.loadData(professionalId);
+    } else {
+      this.error = 'Profissional não especificado.';
+      this.initialLoading = false;
     }
   }
 
-  loadProfessional(id: number): void {
-    this.professionalService.getProfessional(id).subscribe({
-      next: (professional) => {
-        this.professional = professional;
-      }
-    });
-  }
+  loadData(professionalId: number): void {
+    this.initialLoading = true;
+    this.error = null;
+ 
 
-  loadServices(professionalId: number): void {
-    this.serviceManagementService.getServicesByProfessional(professionalId).subscribe({
-      next: (services: Service[]) => {
-        this.services = services;
+    forkJoin({
+      professional: this.professionalService.getProfessional(professionalId).pipe(take(1)),
+      services: this.serviceManagementService.getServicesByProfessional(professionalId).pipe(
+          take(1),
+          catchError(err => {
+              console.error('Error loading services, using professional services as fallback', err);
+              return of([]);
+          })
+      )
+    })
+    .pipe(
+      timeout(10000), // Force timeout after 10s
+      finalize(() => {
+        this.initialLoading = false;
+        
+        this.cdr.detectChanges(); // Force UI update
+      })
+    )
+    .subscribe({
+      next: ({ professional, services }) => {
+        
+        this.professional = professional;
+        // If services endpoint returned empty but professional has embedded services, use them
+        if (services.length === 0 && professional.services && professional.services.length > 0) {
+            this.services = professional.services;
+        } else {
+            this.services = services;
+        }
+        this.setupDateChange();
+      },
+      error: (err) => {
+        this.error = 'Erro ao carregar dados. Verifique sua conexão e tente novamente.';
+        this.cdr.detectChanges();
       }
     });
   }
@@ -91,33 +124,64 @@ export class BookingComponent implements OnInit {
   setupDateChange(): void {
     this.bookingForm.get('date')?.valueChanges
       .pipe(
+        distinctUntilChanged(),
         switchMap(date => {
           this.selectedDate = date;
           const service = this.bookingForm.get('service')?.value;
-          
+          this.availableSlots = [];
+
           if (!date || !service || !this.professional) {
-            return [];
+            return of(null);
           }
 
-          const formattedDate = format(date, 'yyyy-MM-dd');
+          let formattedDate: string;
+          try {
+             // Ensure valid date object
+             const d = (date instanceof Date) ? date : new Date(date);
+             if (isNaN(d.getTime())) {
+                 console.warn('Invalid date selected');
+                 return of(null);
+             }
+             formattedDate = format(d, 'yyyy-MM-dd');
+          } catch (e) {
+              console.error('Date formatting error:', e);
+              return of(null);
+          }
+
+          this.loading = true;
+
           return this.appointmentService.getAvailableSlots(
             this.professional.id,
             formattedDate,
             service.id
+          ).pipe(
+              catchError(err => {
+                  console.error('Error loading slots:', err);
+                  this.loading = false;
+                  return of(null);
+              })
           );
         })
       )
       .subscribe({
-        next: (response: any) => { // Type check workaround or update service return type
-           if (Array.isArray(response)) { // Handle if service returns just array or object
+        next: (response: any) => {
+           if (response === null) {
+               return;
+           }
+           
+           if (Array.isArray(response)) {
                this.availableSlots = response;
            } else {
                this.availableSlots = response.slots || [];
            }
-          this.bookingForm.patchValue({ slot: null });
+           this.bookingForm.patchValue({ slot: null });
+           this.loading = false;
+           this.cdr.detectChanges(); // Force UI update
         },
-        error: () => {
-            this.availableSlots = [];
+        error: (err) => {
+            console.error('Stream error:', err);
+            this.loading = false;
+            this.cdr.detectChanges(); // Force UI update
         }
       });
   }
@@ -127,14 +191,12 @@ export class BookingComponent implements OnInit {
     if (dateControl?.value) {
       dateControl.updateValueAndValidity({ emitEvent: true });
     }
+    // Clear slots when service changes
+    this.availableSlots = []; 
+    this.bookingForm.patchValue({ slot: null });
   }
 
   formatSlot(slot: string): string {
-    const date = new Date(slot); // If slot is full ISO string
-    // If slot is HH:MM, just return it. 
-    // Backend likely returns HH:MM strings based on working hours or ISO strings?
-    // Let's assume HH:MM for now or ISO.
-    // If it scans as date, format it.
     if (slot.includes('T')) {
         return format(new Date(slot), 'HH:mm');
     }
@@ -153,18 +215,20 @@ export class BookingComponent implements OnInit {
       const appointment: any = {
         professional_id: this.professional.id,
         service_id: formValue.service.id,
-        data_hora: appointmentDate.toISOString(), 
-        duracao: formValue.service.duration,
-        observacoes: formValue.observacoes,
-        status: AppointmentStatus.PENDENTE
+        date_time: appointmentDate.toISOString(), 
+        duration: formValue.service.duration,
+        notes: formValue.observacoes,
+        status: AppointmentStatus.PENDING
       };
       
       this.appointmentService.createAppointment(appointment).subscribe({
         next: () => {
           this.router.navigate(['/client/appointments']);
         },
-        error: () => {
-          this.loading = false;
+        error: (err) => {
+            console.error('Error creating appointment:', err);
+            this.error = 'Erro ao realizar agendamento.';
+            this.loading = false;
         }
       });
     }

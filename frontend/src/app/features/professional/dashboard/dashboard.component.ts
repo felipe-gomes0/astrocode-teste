@@ -74,20 +74,20 @@ export class DashboardComponent implements OnInit {
     this.stats = {
       today: this.appointments.filter(apt => {
         const aptDate = parseISO(apt.data_hora);
-        return isToday(aptDate) && apt.status !== AppointmentStatus.CANCELADO;
+        return isToday(aptDate) && apt.status !== AppointmentStatus.CANCELLED;
       }).length,
       pending: this.appointments.filter(apt => 
-        apt.status === AppointmentStatus.PENDENTE
+        apt.status === AppointmentStatus.PENDING
       ).length,
       thisWeek: this.appointments.filter(apt => {
         const aptDate = parseISO(apt.data_hora);
         return aptDate >= today && aptDate < weekFromNow && 
-               apt.status !== AppointmentStatus.CANCELADO;
+               apt.status !== AppointmentStatus.CANCELLED;
       }).length,
       thisMonth: this.appointments.filter(apt => {
         const aptDate = parseISO(apt.data_hora);
         return aptDate >= today && aptDate < monthFromNow && 
-               apt.status !== AppointmentStatus.CANCELADO;
+               apt.status !== AppointmentStatus.CANCELLED;
       }).length
     };
   }
@@ -97,7 +97,7 @@ export class DashboardComponent implements OnInit {
     this.upcomingAppointments = this.appointments
       .filter(apt => {
         const aptDate = parseISO(apt.data_hora);
-        return aptDate >= now && apt.status !== AppointmentStatus.CANCELADO;
+        return aptDate >= now && apt.status !== AppointmentStatus.CANCELLED;
       })
       .sort((a, b) => new Date(a.data_hora).getTime() - new Date(b.data_hora).getTime())
       .slice(0, 5);
@@ -109,7 +109,7 @@ export class DashboardComponent implements OnInit {
 
   confirmAppointment(appointment: AppointmentWithDetails): void {
     this.appointmentService.updateAppointment(appointment.id, {
-      status: AppointmentStatus.CONFIRMADO
+      status: AppointmentStatus.CONFIRMED
     }).subscribe({
       next: () => {
         this.loadAppointments();
@@ -119,7 +119,7 @@ export class DashboardComponent implements OnInit {
 
   completeAppointment(appointment: AppointmentWithDetails): void {
     this.appointmentService.updateAppointment(appointment.id, {
-      status: AppointmentStatus.CONCLUIDO
+      status: AppointmentStatus.COMPLETED
     }).subscribe({
       next: () => {
         this.loadAppointments();

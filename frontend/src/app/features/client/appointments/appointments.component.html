@@ -2,7 +2,7 @@
   <h1>Meus Agendamentos</h1>
 
   <div class="appointments-grid" *ngIf="!loading">
-    <mat-card *ngFor="let appointment of appointments" [class.cancelled]="appointment.status === 'cancelado'">
+    <mat-card *ngFor="let appointment of appointments" [class.cancelled]="appointment.status === 'cancelled'">
       <mat-card-header>
         <div class="status-badge" [ngClass]="appointment.status">
             {{ getStatusLabel(appointment.status) }}
