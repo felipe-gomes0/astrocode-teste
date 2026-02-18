@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, inject, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatNativeDateModule } from '@angular/material/core';
-import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatCalendar, MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -49,6 +49,8 @@ export class BlockManagerComponent implements OnInit {
   currentProfessionalId: number | null = null;
   loading = false;
 
+  @ViewChild(MatCalendar) calendar: MatCalendar<Date> | undefined;
+
   constructor() {
     this.blockForm = this.fb.group({
       reason: [''], 
@@ -63,6 +65,7 @@ export class BlockManagerComponent implements OnInit {
     this.authService.currentUser.subscribe(user => {
       if (user && user.type === 'professional' && user.professional) {
         this.currentProfessionalId = user.professional.id;
+        this.updateDateClass();
         this.loadBlocks();
       }
     });
@@ -72,9 +75,32 @@ export class BlockManagerComponent implements OnInit {
     if (this.currentProfessionalId) {
       this.blockService.getBlocks(this.currentProfessionalId).subscribe(blocks => {
         this.blocks = blocks.sort((a,b) => new Date(a.start_time).getTime() - new Date(b.start_time).getTime());
+        this.updateDateClass();
+        this.calendar?.updateTodaysDate(); 
       });
     }
   }
+
+  updateDateClass(): void {
+    this.dateClass = (date: Date): string => {
+        const startOfDay = new Date(date);
+        startOfDay.setHours(0, 0, 0, 0);
+        const endOfDay = new Date(date);
+        endOfDay.setHours(23, 59, 59, 999);
+    
+        const hasBlock = this.blocks.some(block => {
+            const blockStart = new Date(block.start_time);
+            const blockEnd = new Date(block.end_time);
+            return blockStart < endOfDay && blockEnd > startOfDay;
+        });
+
+        return hasBlock ? 'blocked-day' : '';
+    };
+  }
+
+  dateClass = (date: Date): string => {
+      return '';
+  };
 
   onDateSelect(date: Date | null): void {
     this.selectedDate = date;
@@ -86,20 +112,21 @@ export class BlockManagerComponent implements OnInit {
     }
   }
 
-  dateClass = (date: Date): string => {
-    const startOfDay = new Date(date);
-    startOfDay.setHours(0, 0, 0, 0);
-    const endOfDay = new Date(date);
-    endOfDay.setHours(23, 59, 59, 999);
+  isBlockActiveOnDate(block: Block, date: Date | null): boolean {
+    if (!date) return false;
+    
+    const targetDate = new Date(date);
+    targetDate.setHours(0, 0, 0, 0); // Start of selected day
+    
+    const nextDay = new Date(targetDate);
+    nextDay.setDate(nextDay.getDate() + 1); // Start of next day
 
-    const hasBlock = this.blocks.some(block => {
-        const blockStart = new Date(block.start_time);
-        const blockEnd = new Date(block.end_time);
-        return blockStart < endOfDay && blockEnd > startOfDay;
-    });
+    const blockStart = new Date(block.start_time);
+    const blockEnd = new Date(block.end_time);
 
-    return hasBlock ? 'blocked-day' : '';
-  };
+    // Check for overlap: block starts before next day AND block ends after start of target day
+    return blockStart < nextDay && blockEnd > targetDate;
+  }
 
   addBlock(): void {
     if (this.loading) return;
@@ -140,6 +167,9 @@ export class BlockManagerComponent implements OnInit {
             this.blocks.push(res);
             this.blocks.sort((a,b) => new Date(a.start_time).getTime() - new Date(b.start_time).getTime());
             
+            this.updateDateClass();
+            this.calendar?.updateTodaysDate(); 
+            
             this.blockForm.reset({
                 startDate: this.selectedDate,
                 endDate: this.selectedDate,
@@ -151,7 +181,6 @@ export class BlockManagerComponent implements OnInit {
           },
           error: (err) => {
             this.loading = false;
-            console.error(err);
             this.snackBar.open('Erro ao criar bloqueio', 'Fechar', { duration: 3000 });
           }
         });

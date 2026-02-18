@@ -108,7 +108,7 @@
         
         <div class="day-blocks-list">
           <ng-container *ngFor="let block of blocks">
-            <div *ngIf="(block.start_time | date:'yyyy-MM-dd') === (selectedDate | date:'yyyy-MM-dd')" 
+            <div *ngIf="isBlockActiveOnDate(block, selectedDate)" 
                  class="mini-block-card">
               <div class="mini-card-time">
                 {{ block.start_time | date:'HH:mm' }} - {{ block.end_time | date:'HH:mm' }}

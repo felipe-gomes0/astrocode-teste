@@ -246,13 +246,11 @@
 }
 
 ::ng-deep .custom-main-calendar .blocked-day {
-  background-color: $primary-light; 
-  border-radius: 50%;
-  color: $primary-dark; 
-  font-weight: $font-weight-bold;
-  
   .mat-calendar-body-cell-content {
+      background-color: $primary-light !important; 
       color: $primary-dark !important; 
+      border-radius: 50%;
+      border: 1px solid $primary-color !important;
   }
 }
 
