@@ -71,6 +71,8 @@ def read_my_appointments(
         
     return appointments
 
+from datetime import timedelta, date as date_cls, time as time_cls, datetime
+
 @router.get("/available-slots")
 def get_available_slots(
     professional_id: int,
@@ -81,7 +83,85 @@ def get_available_slots(
     """
     Get available slots for a professional on a specific date.
     """
-    return {"date": date, "slots": ["09:00", "10:00", "11:00", "14:00", "15:00"]}
+    try:
+        query_date = datetime.strptime(date, "%Y-%m-%d").date()
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Invalid date format. Use YYYY-MM-DD")
+
+    weekday = query_date.weekday() # 0=Monday, 6=Sunday
+
+    # 1. Get working hours
+    working_hours = db.query(WorkingHours).filter(
+        WorkingHours.professional_id == professional_id,
+        WorkingHours.day_of_week == weekday,
+        WorkingHours.active == True
+    ).first()
+
+    if not working_hours:
+        return {"date": date, "slots": []}
+
+    # 2. Get service duration
+    service = db.query(Service).filter(Service.id == service_id).first()
+    if not service:
+        raise HTTPException(status_code=404, detail="Service not found")
+    
+    duration = service.duration # in minutes
+
+    # 3. Get existing appointments
+    appointments = db.query(Appointment).filter(
+        Appointment.professional_id == professional_id,
+        Appointment.date_time >= datetime.combine(query_date, time_cls.min),
+        Appointment.date_time <= datetime.combine(query_date, time_cls.max),
+        Appointment.status != "cancelled" # Assuming there's a cancelled status or similar logic
+    ).all()
+
+    # 4. Get blocks
+    # Blocks can span multiple days, so we check for overlap
+    # Block start < day_end AND Block end > day_start
+    day_start = datetime.combine(query_date, time_cls.min)
+    day_end = datetime.combine(query_date, time_cls.max)
+    
+    blocks = db.query(Block).filter(
+        Block.professional_id == professional_id,
+        Block.start_time < day_end,
+        Block.end_time > day_start
+    ).all()
+
+    # 5. Generate slots
+    slots = []
+    current_time = datetime.combine(query_date, working_hours.start_time)
+    end_time = datetime.combine(query_date, working_hours.end_time)
+
+    while current_time + timedelta(minutes=duration) <= end_time:
+        slot_start = current_time
+        slot_end = current_time + timedelta(minutes=duration)
+        
+        is_available = True
+        
+        # Check appointments
+        for appt in appointments:
+            appt_start = appt.date_time
+            appt_end = appt.date_time + timedelta(minutes=appt.duration)
+            
+            # Check overlap: (StartA < EndB) and (EndA > StartB)
+            if slot_start < appt_end and slot_end > appt_start:
+                is_available = False
+                break
+        
+        # Check blocks
+        if is_available:
+            for block in blocks:
+                # Check overlap
+                if slot_start < block.end_time and slot_end > block.start_time:
+                    is_available = False
+                    break
+        
+        if is_available:
+            slots.append(slot_start.strftime("%H:%M"))
+            
+        current_time += timedelta(minutes=duration)
+
+    return {"date": date, "slots": slots}
 
 
 @router.put("/{id}", response_model=AppointmentSchema)

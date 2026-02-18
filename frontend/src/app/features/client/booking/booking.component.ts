@@ -146,22 +146,18 @@ export class BookingComponent implements OnInit {
       this.loading = true;
       
       const formValue = this.bookingForm.value;
+      const [hours, minutes] = formValue.slot.split(':').map(Number);
+      const appointmentDate = new Date(this.selectedDate!);
+      appointmentDate.setHours(hours, minutes, 0, 0);
+
       const appointment: any = {
         professional_id: this.professional.id,
         service_id: formValue.service.id,
-        // Combine date and time to ISO string if slot is just time
-        // Or if slot IS the full ISO string from backend
-        // Assume slot is date-time string
-        data_hora: formValue.slot, 
+        data_hora: appointmentDate.toISOString(), 
         duracao: formValue.service.duration,
         observacoes: formValue.observacoes,
         status: AppointmentStatus.PENDENTE
       };
-
-      // Ensure data_hora is proper ISO format
-      // If backend returns slots as '09:00', we need to combine with date.
-      // If backend returns ISO '2023-10-27T09:00:00', use as is.
-      // Let's assume ISO for robust handling.
       
       this.appointmentService.createAppointment(appointment).subscribe({
         next: () => {
