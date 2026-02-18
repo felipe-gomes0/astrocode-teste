@@ -1,31 +1,16 @@
-$primary-color: #ef4444; 
-$primary-light: #fee2e2;
-$gray-50: #f9fafb;
-$gray-100: #f3f4f6; 
-$gray-200: #e5e7eb;
-$gray-300: #d1d5db;
-$gray-400: #9ca3af;
-$gray-500: #6b7280;
-$gray-600: #4b5563;
-$gray-800: #1f2937;
-$gray-900: #111827;
-$white: #ffffff;
-
-$radius-xl: 1rem;
-$radius-2xl: 1.5rem;
-$radius-full: 9999px;
+@use '../../../../variables' as *;
 
 :host {
   display: block;
   min-height: 100%;
-  background-color: #fafafa;
+  background-color: $gray-50; 
 }
 
 .block-manager-container {
   width: 100%;
   margin-left: auto;
   margin-right: auto;
-  padding: 1rem;
+  padding: $space-4; 
   max-width: 72rem;
   display: flex;
   flex-direction: column;
@@ -33,24 +18,24 @@ $radius-full: 9999px;
   justify-content: center;
 
   @media (min-width: 768px) {
-    padding: 2rem;
+    padding: $space-8; 
   }
 }
 
 .block-header {
-  margin-bottom: 2rem;
+  margin-bottom: $space-8; 
   border-bottom: 1px solid $gray-100;
-  padding-bottom: 1rem;
+  padding-bottom: $space-4; 
 
   .page-title {
-    font-size: 1.5rem;
-    font-weight: 700;
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-bold;
     color: $gray-900;
   }
 
   .page-subtitle {
     color: $gray-500;
-    margin-top: 0.25rem;
+    margin-top: $space-1; 
   }
 }
 
@@ -58,8 +43,8 @@ $radius-full: 9999px;
   background-color: $white;
   border: 1px solid $gray-100;
   border-radius: $radius-xl;
-  padding: 1.5rem;
-  margin-bottom: 2.5rem;
+  padding: $space-6; 
+  margin-bottom: $space-10;
   position: relative;
   overflow: hidden;
   width: 100%;
@@ -70,11 +55,11 @@ $radius-full: 9999px;
     position: absolute;
     top: 0;
     right: 0;
-    width: 4rem;
+    width: 4rem; 
     height: 4rem;
     background-color: $primary-light;
     border-radius: $radius-full;
-    transform: translate(1.5rem, -1.5rem);
+    transform: translate(1.5rem, -1.5rem); 
     opacity: 0.5;
   }
 
@@ -85,19 +70,19 @@ $radius-full: 9999px;
 }
 
 .card-title {
-  font-size: 1.125rem;
-  font-weight: 600;
+  font-size: $font-size-lg; 
+  font-weight: 600; 
   color: $gray-800;
-  margin-bottom: 1.5rem;
+  margin-bottom: $space-6; 
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: $space-2; 
 
   .icon-wrapper {
-    padding: 0.5rem;
+    padding: $space-2;
     background-color: $primary-light;
-    color: #dc2626;
-    border-radius: 0.5rem;
+    color: $red-600; 
+    border-radius: $radius-lg; 
     display: flex;
     align-items: center;
     justify-content: center;
@@ -105,16 +90,16 @@ $radius-full: 9999px;
   }
 }
 
-.block-form { display: flex; flex-direction: column; gap: 1.5rem; }
-.form-row { display: grid; grid-template-columns: 1fr; gap: 1.5rem; @media (min-width: 768px) { grid-template-columns: repeat(2, 1fr); } }
-.date-group { background-color: $gray-50; padding: 1rem; border-radius: 0.75rem; border: 1px solid $gray-100; display: flex; flex-direction: column; gap: 0.75rem; .group-label { font-size: 0.75rem; font-weight: 700; color: $gray-400; text-transform: uppercase; } .inputs-row { display: flex; gap: 0.75rem; .form-field.flex-1 { flex: 1; } .form-field.w-small { width: 7rem; } } }
+.block-form { display: flex; flex-direction: column; gap: $space-6; }
+.form-row { display: grid; grid-template-columns: 1fr; gap: $space-6; @media (min-width: 768px) { grid-template-columns: repeat(2, 1fr); } }
+.date-group { background-color: $gray-50; padding: $space-4; border-radius: 0.75rem; border: 1px solid $gray-100; display: flex; flex-direction: column; gap: $space-3; .group-label { font-size: $font-size-xs; font-weight: $font-weight-bold; color: $gray-400; text-transform: uppercase; } .inputs-row { display: flex; gap: $space-3; .form-field.flex-1 { flex: 1; } .form-field.w-small { width: 7rem; } } }
 .form-field { width: 100%; } .full-width { width: 100%; }
-.form-actions { display: flex; justify-content: flex-end; padding-top: 0.5rem; .submit-btn { padding: 1.5rem 2rem !important; border-radius: 0.75rem !important; font-size: 1rem !important; box-shadow: 0 10px 15px -3px rgba(254, 226, 226, 0.5); } }
+.form-actions { display: flex; justify-content: flex-end; padding-top: $space-2; .submit-btn { padding: $space-6 $space-8 !important; border-radius: 0.75rem !important; font-size: $font-size-base !important; box-shadow: 0 10px 15px -3px rgba(254, 226, 226, 0.5); } }
 
 .calendar-layout {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 1.5rem;
+  gap: $space-6;
   width: 100%;
   margin: 0 auto;
 
@@ -127,14 +112,14 @@ $radius-full: 9999px;
   background-color: $white;
   border: 1px solid $gray-100;
   border-radius: $radius-xl;
-  padding: 1.5rem;
+  padding: $space-6;
   height: fit-content;
 
   .calendar-header-custom {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
+    gap: $space-2;
+    margin-bottom: $space-4;
     color: $gray-800;
     font-weight: 600;
   }
@@ -148,16 +133,16 @@ $radius-full: 9999px;
   .calendar-legend {
     display: flex;
     justify-content: center;
-    gap: 1.5rem;
-    margin-top: 1rem;
-    padding-top: 1rem;
+    gap: $space-6;
+    margin-top: $space-4;
+    padding-top: $space-4;
     border-top: 1px solid $gray-100;
 
     .legend-item {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
-      font-size: 0.75rem;
+      gap: $space-2;
+      font-size: $font-size-xs;
       color: $gray-500;
       
       .dot {
@@ -183,22 +168,22 @@ $radius-full: 9999px;
 }
 
 .details-header {
-  padding: 1.5rem;
+  padding: $space-6;
   border-bottom: 1px solid $gray-100;
   background-color: $gray-50;
 
   .date-info {
     .details-label {
-      font-size: 0.75rem;
-      font-weight: 700;
+      font-size: $font-size-xs;
+      font-weight: $font-weight-bold;
       color: $gray-400;
       text-transform: uppercase;
       display: block;
-      margin-bottom: 0.25rem;
+      margin-bottom: $space-1;
     }
     .details-date {
-      font-size: 1.25rem;
-      font-weight: 700;
+      font-size: $font-size-xl;
+      font-weight: $font-weight-bold;
       color: $gray-800;
       margin: 0;
     }
@@ -208,13 +193,13 @@ $radius-full: 9999px;
 .details-content {
   flex: 1;
   overflow-y: auto;
-  padding: 1rem;
+  padding: $space-4;
 }
 
 .day-blocks-list {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: $space-3;
 }
 
 .mini-block-card {
@@ -223,8 +208,8 @@ $radius-full: 9999px;
   justify-content: space-between;
   background-color: $white;
   border: 1px solid $gray-200;
-  border-radius: 0.5rem;
-  padding: 0.75rem;
+  border-radius: $radius-lg;
+  padding: $space-3;
   transition: all 0.2s;
 
   &:hover {
@@ -233,15 +218,15 @@ $radius-full: 9999px;
   }
 
   .mini-card-time {
-    font-size: 0.875rem;
+    font-size: $font-size-sm;
     font-weight: 600;
     color: $gray-800;
   }
 
   .mini-card-reason {
-    font-size: 0.75rem;
+    font-size: $font-size-xs;
     color: $gray-500;
-    margin: 0 0.5rem;
+    margin: 0 $space-2;
     flex: 1;
     white-space: nowrap;
     overflow: hidden;
@@ -254,7 +239,7 @@ $radius-full: 9999px;
     line-height: 2rem;
     color: $gray-400;
     
-    mat-icon { font-size: 1.25rem; }
+    mat-icon { font-size: $font-size-xl; }
 
     &:hover { color: $primary-color; }
   }
@@ -263,11 +248,11 @@ $radius-full: 9999px;
 ::ng-deep .custom-main-calendar .blocked-day {
   background-color: $primary-light; 
   border-radius: 50%;
-  color: #b91c1c; 
-  font-weight: 700;
+  color: $primary-dark; 
+  font-weight: $font-weight-bold;
   
   .mat-calendar-body-cell-content {
-      color: #b91c1c !important; 
+      color: $primary-dark !important; 
   }
 }
 
@@ -279,7 +264,7 @@ $radius-full: 9999px;
 ::ng-deep .form-field .mat-mdc-form-field-flex {
   background-color: $white !important;
   border-radius: 0.75rem !important;
-  padding: 0 1rem !important;
+  padding: 0 $space-4 !important;
   border: 1px solid $gray-200;
 }
 ::ng-deep .form-field.mat-focused .mat-mdc-form-field-flex {

@@ -1,5 +1,7 @@
+@use '../../../../variables' as *;
+
 .booking-container {
-  padding: 24px;
+  padding: $space-6;
   display: flex;
   justify-content: center;
 }
@@ -11,9 +13,9 @@
 
 .professional-info {
   display: flex;
-  gap: 16px;
+  gap: $space-4;
   align-items: center;
-  margin-bottom: 24px;
+  margin-bottom: $space-6;
 
   img {
     width: 80px;
@@ -25,16 +27,16 @@
 
 .full-width {
   width: 100%;
-  margin-bottom: 16px;
+  margin-bottom: $space-4;
 }
 
 .slots-container {
-  margin-bottom: 24px;
+  margin-bottom: $space-6;
   
   label {
     display: block;
-    margin-bottom: 8px;
-    color: #666;
+    margin-bottom: $space-2;
+    color: $gray-600;
     font-size: 14px;
   }
 }
@@ -42,15 +44,15 @@
 .no-slots {
   text-align: center;
   color: #f44336;
-  margin-bottom: 24px;
-  padding: 16px;
+  margin-bottom: $space-6;
+  padding: $space-4;
   background-color: #ffebee;
-  border-radius: 4px;
+  border-radius: $radius; 
 }
 
 .actions {
   display: flex;
   justify-content: flex-end;
-  gap: 16px;
-  margin-top: 24px;
+  gap: $space-4;
+  margin-top: $space-6;
 }

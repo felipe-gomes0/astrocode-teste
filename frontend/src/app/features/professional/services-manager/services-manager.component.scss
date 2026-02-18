@@ -1,5 +1,7 @@
+@use '../../../../variables' as *;
+
 .services-container {
-  padding: 24px;
+  padding: $space-6;
   max-width: 1000px;
   margin: 0 auto;
 }
@@ -8,11 +10,11 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 24px;
+  margin-bottom: $space-6;
 
   h1 {
       margin: 0;
-      color: #333;
+      color: $gray-800;
   }
 }
 
@@ -22,7 +24,7 @@
 
 .empty-state {
   text-align: center;
-  padding: 48px;
-  color: #666;
-  background-color: #f9f9f9;
+  padding: $space-12;
+  color: $gray-600;
+  background-color: $gray-50;
 }
