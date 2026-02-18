@@ -82,19 +82,27 @@ export class BlockManagerComponent implements OnInit {
   }
 
   updateDateClass(): void {
-    this.dateClass = (date: Date): string => {
-        const startOfDay = new Date(date);
-        startOfDay.setHours(0, 0, 0, 0);
-        const endOfDay = new Date(date);
-        endOfDay.setHours(23, 59, 59, 999);
-    
+    this.dateClass = (cellDate: Date): string => {
+        const cellStart = new Date(cellDate);
+        cellStart.setHours(0, 0, 0, 0);
+        
+        const cellEnd = new Date(cellStart);
+        cellEnd.setDate(cellEnd.getDate() + 1);
+
+        const cellStartTime = cellStart.getTime();
+        const cellEndTime = cellEnd.getTime();
+
         const hasBlock = this.blocks.some(block => {
-            const blockStart = new Date(block.start_time);
-            const blockEnd = new Date(block.end_time);
-            return blockStart < endOfDay && blockEnd > startOfDay;
+            const blockStart = new Date(block.start_time).getTime();
+            const blockEnd = new Date(block.end_time).getTime();
+            
+            return blockStart < cellEndTime && blockEnd > cellStartTime;
         });
 
-        return hasBlock ? 'blocked-day' : '';
+        if (hasBlock) {
+            return 'blocked-day';
+        }
+        return '';
     };
   }
 
@@ -116,15 +124,14 @@ export class BlockManagerComponent implements OnInit {
     if (!date) return false;
     
     const targetDate = new Date(date);
-    targetDate.setHours(0, 0, 0, 0); // Start of selected day
+    targetDate.setHours(0, 0, 0, 0);
     
     const nextDay = new Date(targetDate);
-    nextDay.setDate(nextDay.getDate() + 1); // Start of next day
+    nextDay.setDate(nextDay.getDate() + 1);
 
     const blockStart = new Date(block.start_time);
     const blockEnd = new Date(block.end_time);
 
-    // Check for overlap: block starts before next day AND block ends after start of target day
     return blockStart < nextDay && blockEnd > targetDate;
   }
 
@@ -191,7 +198,6 @@ export class BlockManagerComponent implements OnInit {
   }
 
   private combineDateTime(dateStr: string | Date, timeStr: string): Date {
-      // InputMask might return string 'dd/MM/yyyy' or Date object
       let date: Date;
       
       if (typeof dateStr === 'string' && dateStr.includes('/')) {

@@ -245,29 +245,32 @@
     &:hover { color: $primary-color; }
   }
 }
-
-::ng-deep .custom-main-calendar .blocked-day {
-  .mat-calendar-body-cell-content {
-      background-color: $primary-light !important; 
-      color: $primary-dark !important; 
-      border-radius: 50%;
-      border: 1px solid $primary-color !important;
+.custom-main-calendar {
+  .blocked-day {
+      
+      .mat-calendar-body-cell-content {
+          background-color: #fee2e2 ; /* red-100 */
+          color: #991b1b ; /* red-800 */
+          border-radius: 50%;
+          border: 1px solid #ef4444 ; /* red-500 */
+      }
+      
   }
 }
 
 ::ng-deep .custom-main-calendar .mat-calendar-body-selected {
   background-color: $gray-800;
-  color: $white !important;
+  color: $white;
 }
 
 ::ng-deep .form-field .mat-mdc-form-field-flex {
-  background-color: $white !important;
-  border-radius: 0.75rem !important;
-  padding: 0 $space-4 !important;
+  background-color: $white;
+  border-radius: 0.75rem;
+  padding: 0 $space-4;
   border: 1px solid $gray-200;
 }
 ::ng-deep .form-field.mat-focused .mat-mdc-form-field-flex {
-  border-color: $primary-color !important;
+  border-color: $primary-color;
   box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.1);
 }
 ::ng-deep .form-field .mat-mdc-form-field-subscript-wrapper { display: none; }
