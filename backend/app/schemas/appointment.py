@@ -18,7 +18,6 @@ from uuid import UUID
 # Properties to receive via API on creation
 class AppointmentCreate(AppointmentBase):
     professional_id: int
-    client_id: UUID
     service_id: int
 
 # Properties to receive via API on update
