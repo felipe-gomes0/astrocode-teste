@@ -24,3 +24,26 @@ class Appointment(Base):
     client = relationship("User", foreign_keys=[client_id], back_populates="appointments_as_client")
     service = relationship("Service", back_populates="appointments")
     review = relationship("Review", back_populates="appointment", uselist=False)
+
+    @property
+    def professional_name(self) -> str | None:
+        if self.professional and self.professional.user:
+            return self.professional.user.name
+        return None
+
+    @property
+    def client_name(self) -> str | None:
+        if self.client:
+            return self.client.name
+        return None
+
+    @property
+    def service_name(self) -> str | None:
+        if self.service:
+            return self.service.name
+        return None
+
+    @property
+    def service_price(self) -> float | None:
+        if self.service:
+            return float(self.service.price) if self.service.price else None

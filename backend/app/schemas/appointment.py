@@ -40,11 +40,10 @@ class AppointmentInDBBase(AppointmentBase):
 
 # Additional properties to return via API
 class Appointment(AppointmentInDBBase):
-    pass
-    # Optionally include full related objects if needed for response
-    # professional: Optional[Professional] = None
-    # client: Optional[User] = None
-    # service: Optional[Service] = None
+    professional_name: Optional[str] = None
+    client_name: Optional[str] = None
+    service_name: Optional[str] = None
+    service_price: Optional[float] = None
 
 # Additional properties stored in DB
 class AppointmentInDB(AppointmentInDBBase):

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
@@ -27,6 +27,7 @@ import { AppointmentService } from '../../professional/services/appointment.serv
 export class AppointmentsComponent implements OnInit {
   private appointmentService = inject(AppointmentService);
   private dialog = inject(MatDialog);
+  private cdr = inject(ChangeDetectorRef);
 
   appointments: AppointmentWithDetails[] = [];
   loading = false;
@@ -41,9 +42,11 @@ export class AppointmentsComponent implements OnInit {
       next: (appointments) => {
         this.appointments = appointments;
         this.loading = false;
+        this.cdr.detectChanges();
       },
       error: () => {
         this.loading = false;
+        this.cdr.detectChanges();
       }
     });
   }
