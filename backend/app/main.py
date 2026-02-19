@@ -6,8 +6,29 @@ from app.core.database import engine, Base
 # Import all models to ensure they are registered with Base
 from app.models import user, professional, service, appointment, working_hours, block, review
 
-# Create tables (for development)
-Base.metadata.create_all(bind=engine)
+import time
+from sqlalchemy.exc import OperationalError
+import logging
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+# Retry DB connection
+max_retries = 10
+retry_interval = 2
+
+for i in range(max_retries):
+    try:
+        # Create tables (for development)
+        Base.metadata.create_all(bind=engine)
+        logger.info("Database connected and tables created.")
+        break
+    except OperationalError as e:
+        if i == max_retries - 1:
+            logger.error(f"Could not connect to database after {max_retries} attempts.")
+            raise e
+        logger.warning(f"Database not ready yet, retrying in {retry_interval}s... ({i+1}/{max_retries})")
+        time.sleep(retry_interval)
 
 app = FastAPI(title=settings.PROJECT_NAME, openapi_url=f"{settings.API_V1_STR}/openapi.json")
 
