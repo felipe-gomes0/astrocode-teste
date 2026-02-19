@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -33,6 +33,7 @@ interface DashboardStats {
 })
 export class DashboardComponent implements OnInit {
   private appointmentService = inject(AppointmentService);
+  private cdr = inject(ChangeDetectorRef);
 
   appointments: AppointmentWithDetails[] = [];
   upcomingAppointments: AppointmentWithDetails[] = [];
@@ -58,6 +59,7 @@ export class DashboardComponent implements OnInit {
         this.calculateStats();
         this.getUpcomingAppointments();
         this.loading = false;
+        this.cdr.detectChanges();
       },
       error: () => {
         this.loading = false;

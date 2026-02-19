@@ -16,10 +16,16 @@ class Settings(BaseSettings):
     # JWT
     SECRET_KEY: str
     ALGORITHM: str = "HS256"
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 120
 
     # CORS
     BACKEND_CORS_ORIGINS: list[str] = ["http://localhost:4200", "http://localhost:8000"]
+
+    # Email (Resend)
+    RESEND_API_KEY: Optional[str] = None
+    EMAILS_FROM_ADDRESS: str = "<anything>@naraelo.resend.app"
+    EMAILS_FROM_NAME: str = "Astrocode"
+    EMAILS_ENABLED: bool = False
 
     DATABASE_URL: Optional[str] = None
 

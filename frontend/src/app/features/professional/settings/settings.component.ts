@@ -115,7 +115,7 @@ export class SettingsComponent implements OnInit {
   loadWorkingHours(): void {
       if (!this.currentProfessional) return;
       
-      this.http.get<any[]>(`${environment.apiUrl}/working-hours/professional/${this.currentProfessional.id}`).subscribe({
+      this.http.get<any[]>(`${environment.apiUrl}/working-hours/?professional_id=${this.currentProfessional.id}`).subscribe({
           next: (hours) => {
               hours.forEach(hour => {
                  const control = this.hoursArray.controls.find(c => c.value.dayId === hour.day_of_week);

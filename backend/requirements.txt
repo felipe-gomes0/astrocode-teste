@@ -12,6 +12,8 @@ psycopg2-binary
 python-dotenv
 email-validator
 uuid6
+jinja2
+resend
 
 httpx
 pytest
