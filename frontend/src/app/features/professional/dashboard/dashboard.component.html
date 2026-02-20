@@ -76,6 +76,9 @@
               <button mat-flat-button color="accent" class="action-btn" *ngIf="element.status === 'confirmed'" (click)="completeAppointment(element)">
                 Concluir
               </button>
+              <button mat-button color="warn" class="action-btn" *ngIf="element.status === 'pending' || element.status === 'confirmed'" (click)="cancelAppointment(element)">
+                Cancelar
+              </button>
             </td>
           </ng-container>
 

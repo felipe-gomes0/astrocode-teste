@@ -129,6 +129,16 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+  cancelAppointment(appointment: AppointmentWithDetails): void {
+    if (confirm('Tem certeza que deseja cancelar este agendamento? Esta ação não pode ser desfeita.')) {
+      this.appointmentService.cancelAppointment(appointment.id).subscribe({
+        next: () => {
+          this.loadAppointments();
+        }
+      });
+    }
+  }
+
   getStatusColor(status: AppointmentStatus): string {
     const colors: Record<string, string> = {
       [AppointmentStatus.PENDING]: 'pending',
