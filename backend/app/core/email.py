@@ -1,5 +1,5 @@
 import logging
-
+import asyncio
 import resend
 
 from app.core.config import settings
@@ -7,7 +7,7 @@ from app.core.config import settings
 logger = logging.getLogger(__name__)
 
 
-def send_email(to: str, subject: str, html_body: str) -> bool:
+async def send_email(to: str, subject: str, html_body: str) -> bool:
     if not settings.EMAILS_ENABLED:
         logger.info("Emails disabled. Skipping send to %s", to)
         return False
@@ -26,7 +26,8 @@ def send_email(to: str, subject: str, html_body: str) -> bool:
             "html": html_body,
         }
 
-        response = resend.Emails.send(params)
+        # Run the synchronous resend IO call in a threadpool to not block the asyncio event loop
+        response = await asyncio.to_thread(resend.Emails.send, params)
         logger.info("Email sent to %s (id: %s)", to, response.get("id", "unknown"))
         return True
     except Exception as e:
