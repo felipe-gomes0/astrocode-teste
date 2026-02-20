@@ -1,1 +1,70 @@
-<p>settings works!</p>
+<div class="settings-container">
+  <div class="header">
+    <h1>Configurações do Perfil</h1>
+    <p>Atualize as suas informações pessoais e senha de acesso.</p>
+  </div>
+
+  <mat-card class="settings-card">
+    <mat-card-content>
+      <form [formGroup]="userForm" (ngSubmit)="onSubmit()" class="settings-form">
+        
+        <!-- Info Básica Group -->
+        <div class="form-section">
+          <h3>Informações Básicas</h3>
+          
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Nome Completo</mat-label>
+            <input matInput formControlName="name" placeholder="Seu nome" required />
+            <mat-icon matPrefix>person</mat-icon>
+            <mat-error *ngIf="userForm.get('name')?.hasError('required')">O nome é obrigatório</mat-error>
+            <mat-error *ngIf="userForm.get('name')?.hasError('minlength')">O nome deve ter no mínimo 3 caracteres</mat-error>
+          </mat-form-field>
+
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>E-mail</mat-label>
+              <input matInput formControlName="email" type="email" />
+              <mat-icon matPrefix>email</mat-icon>
+              <mat-hint>O e-mail não pode ser alterado por aqui.</mat-hint>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>Telefone / WhatsApp</mat-label>
+              <input matInput formControlName="phone" placeholder="(11) 99999-9999" />
+              <mat-icon matPrefix>phone</mat-icon>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <!-- Segurança Group -->
+        <div class="form-section">
+          <h3>Segurança</h3>
+          <p class="section-desc">Informe uma nova senha apenas se desejar alterá-la.</p>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Nova Senha</mat-label>
+            <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" placeholder="Digite a nova senha" />
+            <mat-icon matPrefix>lock</mat-icon>
+            <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" type="button" [attr.aria-label]="'Ocultar senha'" [attr.aria-pressed]="hidePassword">
+              <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+            <mat-error *ngIf="userForm.get('password')?.hasError('minlength')">A senha deve ter no mínimo 6 caracteres</mat-error>
+          </mat-form-field>
+        </div>
+
+        <!-- Actions -->
+        <div class="form-actions">
+          <button mat-flat-button color="primary" type="submit" [disabled]="userForm.invalid || loading">
+            <mat-icon *ngIf="!loading">save</mat-icon>
+            <span *ngIf="loading" class="spinner-container">
+              <mat-icon class="spin-icon">autorenew</mat-icon>
+            </span>
+            <span>{{ loading ? 'Salvando...' : 'Salvar Alterações' }}</span>
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

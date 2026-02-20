@@ -65,6 +65,14 @@ export class AuthService {
       return this.http.post<User>(`${environment.apiUrl}/users/`, user);
   }
 
+  updateUser(userId: string, user: Partial<User>): Observable<User> {
+      return this.http.put<User>(`${environment.apiUrl}/users/${userId}`, user).pipe(
+          tap((updatedUser) => {
+              this.currentUserSubject.next(updatedUser);
+          })
+      );
+  }
+
   fetchCurrentUser(): Observable<User> {
     return this.http.get<User>(`${environment.apiUrl}/users/me`).pipe(
       tap(user => {
