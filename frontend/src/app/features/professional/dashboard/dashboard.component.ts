@@ -128,4 +128,24 @@ export class DashboardComponent implements OnInit {
       }
     });
   }
+
+  getStatusColor(status: AppointmentStatus): string {
+    const colors: Record<string, string> = {
+      [AppointmentStatus.PENDING]: 'pending',
+      [AppointmentStatus.CONFIRMED]: 'confirmed',
+      [AppointmentStatus.CANCELLED]: 'cancelled',
+      [AppointmentStatus.COMPLETED]: 'completed'
+    };
+    return colors[status] || 'pending';
+  }
+
+  getStatusLabel(status: AppointmentStatus): string {
+    const labels: Record<string, string> = {
+      [AppointmentStatus.PENDING]: 'Pendente',
+      [AppointmentStatus.CONFIRMED]: 'Confirmado',
+      [AppointmentStatus.CANCELLED]: 'Cancelado',
+      [AppointmentStatus.COMPLETED]: 'Concluído'
+    };
+    return labels[status] || status;
+  }
 }

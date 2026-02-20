@@ -47,6 +47,21 @@
     width: 100%;
 }
 
+.status-badge {
+    padding: 4px 12px;
+    border-radius: 9999px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    display: inline-block;
+
+    &.pending { background-color: #fff7ed; color: #ea580c; border: 1px solid #ffedd5; }
+    &.confirmed { background-color: #f0fdf4; color: #16a34a; border: 1px solid #dcfce7; }
+    &.cancelled { background-color: #fef2f2; color: #dc2626; border: 1px solid #fee2e2; }
+    &.completed { background-color: #f8fafc; color: #475569; border: 1px solid #e2e8f0; }
+}
+
 .empty-state {
     padding: $space-6;
     text-align: center;
