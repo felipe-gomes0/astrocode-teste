@@ -31,7 +31,7 @@ export class AuthService {
       return this.fetchCurrentUser().pipe(
           tap({
               error: (err) => {
-                  if (err.status === 401) {
+                  if (err.status === 401 || err.status === 404) {
                       this.logout();
                   }
               }
