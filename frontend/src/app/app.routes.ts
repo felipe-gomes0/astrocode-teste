@@ -11,7 +11,6 @@ import { SearchComponent } from './features/client/search/search.component';
 // Professional Components
 import { DashboardComponent } from './features/professional/dashboard/dashboard.component';
 import { ServicesManagerComponent } from './features/professional/services-manager/services-manager.component';
-import { SettingsComponent } from './features/professional/settings/settings.component';
 
 export const routes: Routes = [
     { path: 'login', component: LoginComponent, title: 'Login - AstroCode' },
@@ -53,7 +52,11 @@ export const routes: Routes = [
                 loadComponent: () => import('./features/professional/block-manager/block-manager.component').then(m => m.BlockManagerComponent),
                 title: 'Gerenciar Bloqueios - AstroCode'
             },
-            { path: 'settings', component: SettingsComponent, title: 'Configurações - AstroCode' },
+            { 
+                path: 'settings', 
+                loadComponent: () => import('./features/professional/settings/settings.component').then(m => m.SettingsComponent), 
+                title: 'Configurações - AstroCode' 
+            },
             { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
         ]
     },
