@@ -7,6 +7,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { RouterModule } from '@angular/router';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { AppointmentStatus, AppointmentWithDetails } from '../../../core/models/appointment.model';
@@ -23,7 +24,8 @@ import { AppointmentService } from '../../professional/services/appointment.serv
     MatIconModule,
     MatDialogModule,
     MatProgressSpinnerModule,
-    MatTooltipModule
+    MatTooltipModule,
+    RouterModule
   ],
   templateUrl: './appointments.component.html',
   styleUrls: ['./appointments.component.scss']
