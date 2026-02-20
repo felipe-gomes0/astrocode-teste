@@ -3,7 +3,7 @@ from datetime import datetime
 import secrets
 
 from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 
 from app.api import deps
 from app.core.security import get_password_hash
@@ -77,5 +77,12 @@ def create_guest_appointment(
         professional_name=professional.user.name if professional.user else "Profissional",
         duration=service.duration,
     )
+
+    # 5. Re-query with joined models to avoid lazy-loading issues during serialization
+    appointment = db.query(Appointment).options(
+        joinedload(Appointment.professional).joinedload(Professional.user),
+        joinedload(Appointment.client),
+        joinedload(Appointment.service)
+    ).filter(Appointment.id == appointment.id).first()
 
     return appointment

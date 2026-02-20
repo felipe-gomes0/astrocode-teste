@@ -4,7 +4,7 @@ from datetime import datetime
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, Query, BackgroundTasks
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 
 from app.api import deps
 from app.models.appointment import Appointment
@@ -62,6 +62,13 @@ def create_appointment(
         professional_name=professional.user.name if professional.user else "Profissional",
         duration=service.duration,
     )
+
+    # Re-query with joined models to avoid lazy-loading issues during serialization
+    appointment = db.query(Appointment).options(
+        joinedload(Appointment.professional).joinedload(Professional.user),
+        joinedload(Appointment.client),
+        joinedload(Appointment.service)
+    ).filter(Appointment.id == appointment.id).first()
 
     return appointment
 
