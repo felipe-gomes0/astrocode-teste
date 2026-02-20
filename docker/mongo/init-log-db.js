@@ -4,8 +4,8 @@
 db = db.getSiblingDB(process.env.MONGO_INITDB_DATABASE || 'app_logs');
 
 db.createUser({
-  user: 'log_service',
-  pwd: 'changeme_log',
+  user: process.env.LOG_MONGO_USER || 'log_service',
+  pwd: process.env.LOG_MONGO_PASSWORD || 'changeme_log',
   roles: [
     { role: 'readWrite', db: process.env.MONGO_INITDB_DATABASE || 'app_logs' }
   ]
