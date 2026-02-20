@@ -13,6 +13,7 @@ python-dotenv
 email-validator
 uuid6
 
+motor
 httpx
 pytest
 gunicorn
