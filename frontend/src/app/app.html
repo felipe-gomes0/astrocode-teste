@@ -7,6 +7,13 @@
       <ng-container *ngIf="(user$ | async) as user; else guestLinks">
         <!-- Logged In Links -->
         
+        <!-- Client Links -->
+        <ng-container *ngIf="user.type === UserType.CLIENT">
+          <a mat-button routerLink="/client/search" routerLinkActive="active">Buscar Profissionais</a>
+          <a mat-button routerLink="/client/appointments" routerLinkActive="active">Meus Agendamentos</a>
+          <a mat-button routerLink="/client/settings" routerLinkActive="active">Configurações</a>
+        </ng-container>
+
         <!-- Professional Links -->
         <ng-container *ngIf="user.type === UserType.PROFESSIONAL">
           <a mat-button routerLink="/client/search" routerLinkActive="active">Buscar Profissionais</a>

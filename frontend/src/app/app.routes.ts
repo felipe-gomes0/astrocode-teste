@@ -24,13 +24,18 @@ export const routes: Routes = [
     // Public Client Routes
     { path: 'client/search', component: SearchComponent, title: 'Buscar Profissionais - AstroCode' },
 
-    // Protected Client Routes
+// Protected Client Routes
     { 
         path: 'client',
         canActivate: [AuthGuard],
         children: [
             { path: 'booking/:professionalId', component: BookingComponent, title: 'Agendamento - AstroCode' },
             { path: 'appointments', component: AppointmentsComponent, title: 'Meus Agendamentos - AstroCode' },
+            { 
+                path: 'settings', 
+                loadComponent: () => import('./features/client/settings/settings').then(m => m.Settings),
+                title: 'Configurações - AstroCode' 
+            },
             { path: '', redirectTo: 'search', pathMatch: 'full' }
         ]
     },
