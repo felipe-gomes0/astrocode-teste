@@ -5,73 +5,238 @@
   max-width: 800px;
   margin: 0 auto;
 
-  h1 {
-      margin-bottom: $space-6;
+  .header-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: $space-6;
+    
+    h1 {
+      margin: 0;
       color: $gray-800;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
   }
 }
 
-.appointments-grid {
+.appointments-list {
   display: flex;
   flex-direction: column;
-  gap: $space-4;
+  gap: $space-3;
 }
 
-mat-card {
-  position: relative;
-  
+.appointment-item {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: $space-6;
+  padding: $space-4 $space-5;
+  background-color: #ffffff;
+  border: 1px solid $gray-200;
+  border-radius: 12px;
+  align-items: center;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+
+  &:hover {
+    border-color: $gray-300;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transform: translateY(-1px);
+
+    .action-buttons {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+
   &.cancelled {
-      opacity: 0.7;
-      background-color: $gray-100;
+    opacity: 0.6;
+    background-color: $gray-50;
+    cursor: default;
+    
+    &:hover {
+      transform: none;
+      box-shadow: none;
+    }
+  }
+
+  &.completed {
+    background-color: $gray-50;
+    border-color: transparent;
   }
 }
 
-.status-badge {
-    position: absolute;
-    top: $space-4;
-    right: $space-4;
-    padding: $space-1 $space-3;
-    border-radius: $space-4;
-    font-size: 12px;
-    font-weight: $font-weight-medium;
-    text-transform: uppercase;
+.datetime-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 60px;
+  padding-right: $space-4;
+  border-right: 1px solid $gray-100;
 
-    &.pendente { background-color: #fff3e0; color: #f57c00; }
-    &.confirmado { background-color: #e8f5e9; color: #388e3c; }
-    &.cancelado { background-color: #ffebee; color: #d32f2f; }
-    &.concluido { background-color: #e3f2fd; color: #1976d2; }
+  .day {
+    font-size: 24px;
+    font-weight: 700;
+    color: $gray-800;
+    line-height: 1;
+  }
+  
+  .month {
+    font-size: 12px;
+    text-transform: uppercase;
+    color: $gray-500;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    margin-bottom: $space-1;
+  }
+
+  .time {
+    font-size: 13px;
+    color: $primary-color;
+    font-weight: 600;
+    background: rgba($primary-color, 0.1);
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
 }
 
-.info-row {
+.details-block {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  .service-name {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: $gray-900;
+  }
+
+  .professional-info {
+    margin: 0;
+    font-size: 14px;
+    color: $gray-600;
     display: flex;
     align-items: center;
-    gap: $space-2;
-    margin-bottom: $space-2;
-    color: $gray-600;
-
+    gap: 4px;
+    
     mat-icon {
-        font-size: 20px;
-        width: 20px;
-        height: 20px;
+      font-size: 16px;
+      width: 16px;
+      height: 16px;
+      color: $gray-400;
     }
+  }
+
+  .meta-info {
+    display: flex;
+    gap: $space-4;
+    margin-top: $space-1;
+    font-size: 13px;
+    color: $gray-500;
+
+    span {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+
+      mat-icon {
+        font-size: 14px;
+        width: 14px;
+        height: 14px;
+      }
+    }
+  }
 }
 
-.empty-state {
-    text-align: center;
-    padding: $space-12;
-    background-color: $gray-50;
-    border-radius: 8px;
+.actions-block {
+  display: flex;
+  align-items: center;
+  gap: $space-4;
 
-    mat-icon {
-        font-size: 3rem;
-        width: 3rem;
-        height: 3rem;
-        color: $gray-300;
-        margin-bottom: $space-4;
-    }
+  .status-badge {
+    padding: 4px 12px;
+    border-radius: 9999px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
 
-    p {
-        margin-bottom: $space-6;
-        color: $gray-600;
+    &.pending { background-color: #fff7ed; color: #ea580c; border: 1px solid #ffedd5; }
+    &.confirmed { background-color: #f0fdf4; color: #16a34a; border: 1px solid #dcfce7; }
+    &.cancelled { background-color: #fef2f2; color: #dc2626; border: 1px solid #fee2e2; }
+    &.completed { background-color: #f8fafc; color: #475569; border: 1px solid #e2e8f0; }
+  }
+
+  .action-buttons {
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.2s ease;
+    display: flex;
+    gap: $space-2;
+  }
+}
+
+.empty-state, .loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: $space-12 $space-6;
+  background-color: #ffffff;
+  border: 1px dashed $gray-300;
+  border-radius: 12px;
+  text-align: center;
+
+  mat-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    color: $gray-300;
+    margin-bottom: $space-4;
+  }
+
+  h3 {
+    margin: 0 0 $space-2 0;
+    color: $gray-800;
+    font-weight: 600;
+  }
+
+  p {
+    margin: 0 0 $space-6 0;
+    color: $gray-500;
+    max-width: 300px;
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 600px) {
+  .appointment-item {
+    grid-template-columns: 1fr;
+    gap: $space-4;
+    padding: $space-4;
+  }
+
+  .datetime-block {
+    flex-direction: row;
+    justify-content: flex-start;
+    border-right: none;
+    border-bottom: 1px solid $gray-100;
+    padding-right: 0;
+    padding-bottom: $space-3;
+    gap: $space-2;
+
+    .day { font-size: 18px; }
+  }
+
+  .actions-block {
+    justify-content: space-between;
+    margin-top: $space-2;
+    
+    .action-buttons {
+      opacity: 1; /* Always show actions on mobile */
+      visibility: visible;
     }
+  }
 }

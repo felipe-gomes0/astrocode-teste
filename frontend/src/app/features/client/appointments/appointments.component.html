@@ -1,50 +1,72 @@
 <div class="appointments-container">
-  <h1>Meus Agendamentos</h1>
+  <div class="header-actions">
+    <h1>Meus Agendamentos</h1>
+    <button mat-stroked-button color="primary" routerLink="/client/search">
+      <mat-icon>add</mat-icon> Novo Agendamento
+    </button>
+  </div>
 
-  <div class="appointments-grid" *ngIf="!loading">
-    <mat-card *ngFor="let appointment of appointments" [class.cancelled]="appointment.status === 'cancelled'">
-      <mat-card-header>
+  <div class="appointments-list" *ngIf="!loading && appointments.length > 0">
+    <div 
+      *ngFor="let appointment of appointments" 
+      class="appointment-item"
+      [class.cancelled]="appointment.status === 'cancelled'"
+      [class.completed]="appointment.status === 'completed'"
+    >
+      
+      <!-- Date/Time Block -->
+      <div class="datetime-block">
+        <span class="day">{{ getFormattedDate(appointment.date_time).split(' ')[0] }}</span>
+        <span class="month">{{ getFormattedDate(appointment.date_time).split(' ')[2] | slice:0:3 }}</span>
+        <span class="time">{{ getFormattedDate(appointment.date_time).split('ás ')[1] || getFormattedDate(appointment.date_time).slice(-5) }}</span>
+      </div>
+
+      <!-- Details Block -->
+      <div class="details-block">
+        <h3 class="service-name">{{ appointment.service_name || 'Serviço' }}</h3>
+        <p class="professional-info">
+          <mat-icon inline>person</mat-icon> com {{ appointment.professional_name || 'Profissional' }}
+        </p>
+        <div class="meta-info">
+          <span class="duration"><mat-icon inline>schedule</mat-icon> {{ appointment.duration }} min</span>
+          <span class="price" *ngIf="appointment.service_price">
+            <mat-icon inline>attach_money</mat-icon> R$ {{ appointment.service_price | number:'1.2-2' }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Status & Actions Block -->
+      <div class="actions-block">
         <div class="status-badge" [ngClass]="appointment.status">
-            {{ getStatusLabel(appointment.status) }}
+          {{ getStatusLabel(appointment.status) }}
         </div>
-        <mat-card-title>{{ appointment.service_name || 'Serviço' }}</mat-card-title>
-        <mat-card-subtitle>
-            com {{ appointment.professional_name || 'Profissional' }}
-        </mat-card-subtitle>
-      </mat-card-header>
+        
+        <div class="action-buttons">
+          <button 
+            *ngIf="canCancel(appointment)"
+            mat-icon-button 
+            color="warn" 
+            matTooltip="Cancelar agendamento"
+            (click)="cancelAppointment(appointment)">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+      </div>
 
-      <mat-card-content>
-        <div class="info-row">
-            <mat-icon>calendar_today</mat-icon>
-            <span>{{ getFormattedDate(appointment.data_hora) }}</span>
-        </div>
-        <div class="info-row">
-            <mat-icon>schedule</mat-icon>
-            <span>{{ appointment.duracao }} min</span>
-        </div>
-        <div class="info-row" *ngIf="appointment.service_price">
-            <mat-icon>attach_money</mat-icon>
-            <span>R$ {{ appointment.service_price | number:'1.2-2' }}</span>
-        </div>
-      </mat-card-content>
-
-      <mat-card-actions>
-        <button 
-          mat-button 
-          color="warn" 
-          *ngIf="canCancel(appointment)"
-          (click)="cancelAppointment(appointment)">
-          Cancelar
-        </button>
-      </mat-card-actions>
-    </mat-card>
-
-    <div class="empty-state" *ngIf="appointments.length === 0">
-        <mat-icon>event_busy</mat-icon>
-        <p>Você ainda não tem agendamentos.</p>
-        <button mat-raised-button color="primary" routerLink="/client/search">
-            Buscar Profissionais
-        </button>
     </div>
+  </div>
+
+  <div class="empty-state" *ngIf="!loading && appointments.length === 0">
+      <mat-icon>event_busy</mat-icon>
+      <h3>Nenhum agendamento encontrado</h3>
+      <p>Você ainda não tem horários marcados com nossos profissionais.</p>
+      <button mat-flat-button color="primary" routerLink="/client/search">
+          Buscar Profissionais
+      </button>
+  </div>
+  
+  <div class="loading-state" *ngIf="loading">
+    <mat-spinner diameter="40"></mat-spinner>
+    <p>Carregando agendamentos...</p>
   </div>
 </div>

@@ -10,10 +10,10 @@ export interface Appointment {
   professional_id: number;
   client_id: string; // UUID
   service_id: number;
-  data_hora: string;
-  duracao: number;
+  date_time: string;
+  duration: number;
   status: AppointmentStatus;
-  observacoes?: string;
+  notes?: string;
   created_at: string;
   updated_at: string;
 }

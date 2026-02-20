@@ -81,7 +81,8 @@ export class AppointmentsComponent implements OnInit {
   }
 
   canCancel(appointment: AppointmentWithDetails): boolean {
-    const appointmentDate = new Date(appointment.data_hora);
+    if (!appointment.date_time) return false;
+    const appointmentDate = new Date(appointment.date_time);
     const now = new Date();
     const hoursUntilAppointment = (appointmentDate.getTime() - now.getTime()) / (1000 * 60 * 60);
     

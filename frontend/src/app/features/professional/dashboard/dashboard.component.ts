@@ -44,7 +44,7 @@ export class DashboardComponent implements OnInit {
   };
   loading = false;
 
-  displayedColumns: string[] = ['data_hora', 'client', 'service', 'status', 'actions'];
+  displayedColumns: string[] = ['date_time', 'client', 'service', 'status', 'actions'];
 
   ngOnInit(): void {
     this.loadAppointments();
@@ -73,19 +73,19 @@ export class DashboardComponent implements OnInit {
 
     this.stats = {
       today: this.appointments.filter(apt => {
-        const aptDate = parseISO(apt.data_hora);
+        const aptDate = parseISO(apt.date_time);
         return isToday(aptDate) && apt.status !== AppointmentStatus.CANCELLED;
       }).length,
       pending: this.appointments.filter(apt => 
         apt.status === AppointmentStatus.PENDING
       ).length,
       thisWeek: this.appointments.filter(apt => {
-        const aptDate = parseISO(apt.data_hora);
+        const aptDate = parseISO(apt.date_time);
         return aptDate >= today && aptDate < weekFromNow && 
                apt.status !== AppointmentStatus.CANCELLED;
       }).length,
       thisMonth: this.appointments.filter(apt => {
-        const aptDate = parseISO(apt.data_hora);
+        const aptDate = parseISO(apt.date_time);
         return aptDate >= today && aptDate < monthFromNow && 
                apt.status !== AppointmentStatus.CANCELLED;
       }).length
@@ -96,10 +96,10 @@ export class DashboardComponent implements OnInit {
     const now = new Date();
     this.upcomingAppointments = this.appointments
       .filter(apt => {
-        const aptDate = parseISO(apt.data_hora);
+        const aptDate = parseISO(apt.date_time);
         return aptDate >= now && apt.status !== AppointmentStatus.CANCELLED;
       })
-      .sort((a, b) => new Date(a.data_hora).getTime() - new Date(b.data_hora).getTime())
+      .sort((a, b) => new Date(a.date_time).getTime() - new Date(b.date_time).getTime())
       .slice(0, 5);
   }
 
