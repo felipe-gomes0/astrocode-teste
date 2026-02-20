@@ -20,6 +20,12 @@ class AppointmentCreate(AppointmentBase):
     professional_id: int
     service_id: int
 
+# Properties to receive via API for unauthenticated guests
+class GuestAppointmentCreate(AppointmentCreate):
+    client_name: str
+    client_email: str
+    client_phone: str
+
 # Properties to receive via API on update
 class AppointmentUpdate(BaseModel):
     date_time: Optional[datetime] = None

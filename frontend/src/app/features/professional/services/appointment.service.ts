@@ -22,6 +22,10 @@ export class AppointmentService {
     return this.http.post<Appointment>(this.apiUrl, appointment);
   }
 
+  createGuestAppointment(appointmentData: any): Observable<Appointment> {
+    return this.http.post<Appointment>(`${environment.apiUrl}/guest-appointments/`, appointmentData);
+  }
+
   getMyAppointments(): Observable<AppointmentWithDetails[]> {
     return this.http.get<AppointmentWithDetails[]>(`${this.apiUrl}/my-appointments`);
   }

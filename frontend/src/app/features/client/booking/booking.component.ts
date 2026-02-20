@@ -6,6 +6,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -17,9 +18,11 @@ import { catchError, distinctUntilChanged, finalize, switchMap, take, timeout } 
 import { AppointmentStatus } from '../../../core/models/appointment.model';
 import { Professional } from '../../../core/models/professional.model';
 import { Service } from '../../../core/models/service.model';
+import { AuthService } from '../../../core/services/auth.service';
 import { AppointmentService } from '../../professional/services/appointment.service';
 import { ProfessionalService } from '../../professional/services/professional.service';
 import { ServiceManagementService } from '../../professional/services/service-management.service';
+import { GuestInfoDialogComponent } from './guest-info-dialog.component';
 
 @Component({
   selector: 'app-booking',
@@ -36,7 +39,8 @@ import { ServiceManagementService } from '../../professional/services/service-ma
     MatButtonModule,
     MatChipsModule,
     MatInputModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatDialogModule
   ],
   templateUrl: './booking.component.html',
   styleUrls: ['./booking.component.scss']
@@ -59,8 +63,13 @@ export class BookingComponent implements OnInit {
   error: string | null = null;
   selectedDate: Date | null = null;
   today = new Date();
+  isLoggedIn = false;
+  private authService = inject(AuthService);
+  private dialog = inject(MatDialog);
 
   constructor() {
+    this.isLoggedIn = this.authService.isLoggedIn;
+
     this.bookingForm = this.fb.group({
       service: [null, Validators.required],
       date: [null, Validators.required],
@@ -221,16 +230,47 @@ export class BookingComponent implements OnInit {
         status: AppointmentStatus.PENDING
       };
       
-      this.appointmentService.createAppointment(appointment).subscribe({
-        next: () => {
-          this.router.navigate(['/client/appointments']);
-        },
-        error: (err) => {
-            console.error('Error creating appointment:', err);
-            this.error = 'Erro ao realizar agendamento.';
+      if (this.isLoggedIn) {
+        this.appointmentService.createAppointment(appointment).subscribe({
+          next: () => {
+            this.router.navigate(['/client/appointments']);
+          },
+          error: (err) => {
+              console.error('Error creating appointment:', err);
+              this.error = 'Erro ao realizar agendamento.';
+              this.loading = false;
+          }
+        });
+      } else {
+        const dialogRef = this.dialog.open(GuestInfoDialogComponent, {
+          width: '500px',
+          disableClose: true
+        });
+
+        dialogRef.afterClosed().subscribe(guestInfo => {
+          if (guestInfo) {
+            const guestData = {
+              ...appointment,
+              ...guestInfo
+            };
+            
+            this.appointmentService.createGuestAppointment(guestData).subscribe({
+              next: () => {
+                 alert('Agendamento realizado com sucesso! Você receberá uma confirmação por e-mail.');
+                 this.router.navigate(['/client/search']);
+              },
+              error: (err: any) => {
+                  console.error('Error creating guest appointment:', err);
+                  this.error = 'Erro ao realizar agendamento.';
+                  this.loading = false;
+              }
+            });
+          } else {
+            // User cancelled the dialog, reset loading
             this.loading = false;
-        }
-      });
+          }
+        });
+      }
     }
   }
 }
