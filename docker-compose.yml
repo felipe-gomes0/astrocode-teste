@@ -8,12 +8,24 @@ services:
       - "8000:8000"
     environment:
       - DATABASE_URL=${DATABASE_URL}
+      - LOG_MONGO_URI=mongodb://${LOG_MONGO_USER}:${LOG_MONGO_PASSWORD}@mongodb:27017/${LOG_DB_NAME}?authSource=admin
+      - LOG_DB_NAME=${LOG_DB_NAME}
+      - LOG_COLLECTION_NAME=logs
+      - LOG_LEVEL=${LOG_LEVEL:-info}
+      - ENVIRONMENT=${ENVIRONMENT:-development}
+      - APP_VERSION=${APP_VERSION:-1.0.0}
     env_file:
       - .env
     volumes:
       - ./backend:/app
     depends_on:
       - db
+      - mongodb
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
 
   frontend:
     container_name: frontend
@@ -29,6 +41,11 @@ services:
       - CHOKIDAR_USEPOLLING=true
     depends_on:
       - backend
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
 
   db:
     container_name: db
@@ -41,6 +58,31 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+  mongodb:
+    image: mongo:7.0
+    container_name: mongodb_logs
+    restart: unless-stopped
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_ROOT_USER}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_ROOT_PASSWORD}
+      - MONGO_INITDB_DATABASE=${LOG_DB_NAME}
+    volumes:
+      - mongo_logs_data:/data/db
+      - ./docker/mongo/init-log-db.js:/docker-entrypoint-initdb.d/init.js:ro
+    ports:
+      - "27017:27017"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
 
 volumes:
   postgres_data:
+  mongo_logs_data:
