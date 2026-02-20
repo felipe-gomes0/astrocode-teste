@@ -27,6 +27,11 @@ class Settings(BaseSettings):
     EMAILS_FROM_NAME: str = "Astrocode"
     EMAILS_ENABLED: bool = False
 
+    # Cloudinary
+    CLOUDINARY_CLOUD_NAME: str = ""
+    CLOUDINARY_API_KEY: str = ""
+    CLOUDINARY_API_SECRET: str = ""
+
     DATABASE_URL: Optional[str] = None
 
     model_config = SettingsConfigDict(
