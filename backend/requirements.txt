@@ -18,4 +18,5 @@ resend
 motor
 httpx
 pytest
+pytest-asyncio
 gunicorn
