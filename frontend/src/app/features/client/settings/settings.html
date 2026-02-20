@@ -30,7 +30,7 @@
 
             <mat-form-field appearance="outline" class="half-width">
               <mat-label>Telefone / WhatsApp</mat-label>
-              <input matInput formControlName="phone" placeholder="(11) 99999-9999" />
+              <input matInput formControlName="phone" placeholder="(11) 99999-9999" mask="(00) 00000-0000" [showMaskTyped]="true" />
               <mat-icon matPrefix>phone</mat-icon>
             </mat-form-field>
           </div>

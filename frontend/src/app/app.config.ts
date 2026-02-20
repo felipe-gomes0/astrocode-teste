@@ -6,6 +6,7 @@ import { provideRouter } from '@angular/router';
 import { registerLocaleData } from '@angular/common';
 import localePt from '@angular/common/locales/pt';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
+import { provideEnvironmentNgxMask } from 'ngx-mask';
 import { routes } from './app.routes';
 import { authInterceptor } from './core/interceptors/auth.interceptor';
 import { errorInterceptor } from './core/interceptors/error.interceptor';
@@ -21,6 +22,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideHttpClient(withFetch(), withInterceptors([authInterceptor, errorInterceptor, loadingInterceptor, logInterceptor])),
     provideAnimations(),
+    provideEnvironmentNgxMask(),
     { provide: LOCALE_ID, useValue: 'pt-BR' },
     { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' },
     {

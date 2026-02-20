@@ -8,6 +8,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { NgxMaskDirective } from 'ngx-mask';
 import { User } from '../../../core/models/user.model';
 import { AuthService } from '../../../core/services/auth.service';
 
@@ -23,7 +24,8 @@ import { AuthService } from '../../../core/services/auth.service';
     MatInputModule,
     MatButtonModule,
     MatIconModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    NgxMaskDirective
   ],
   templateUrl: './settings.html',
   styleUrl: './settings.scss'
