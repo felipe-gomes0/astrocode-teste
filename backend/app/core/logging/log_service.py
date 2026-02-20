@@ -73,11 +73,15 @@ class LogService:
             expires_at=_compute_expires_at(level),
         )
 
+    _background_tasks = set()
+
     def _fire_and_forget(self, doc: LogDocument) -> None:
         """Schedule the async insert without awaiting — truly non-blocking."""
         try:
             loop = asyncio.get_running_loop()
-            loop.create_task(self._safe_insert(doc))
+            task = loop.create_task(self._safe_insert(doc))
+            self._background_tasks.add(task)
+            task.add_done_callback(self._background_tasks.discard)
         except RuntimeError:
             # No running loop (e.g. called from sync context)
             logger.warning(f"[{doc.level.upper()}] {doc.action}: {doc.message}")

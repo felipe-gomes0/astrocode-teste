@@ -1,6 +1,6 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
-import { map } from 'rxjs/operators';
+import { filter, map, take } from 'rxjs/operators';
 import { AuthService } from '../services/auth.service';
 
 export const roleGuard: CanActivateFn = (route, state) => {
@@ -8,9 +8,16 @@ export const roleGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
   const requiredRole = route.data['role'];
 
-  return authService.currentUser$.pipe(
+  return authService.currentUser.pipe(
+    filter(user => user !== null), // Wait for user to be loaded
+    take(1),
     map(user => {
-      if (!user || user.tipo !== requiredRole) {
+      if (!user) { // Should not happen due to filter, but for type safety
+        router.navigate(['/login']);
+        return false;
+      }
+      
+      if (user.type !== requiredRole) {
         router.navigate(['/']);
         return false;
       }

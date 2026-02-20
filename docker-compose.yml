@@ -8,7 +8,7 @@ services:
       - "8000:8000"
     environment:
       - DATABASE_URL=${DATABASE_URL}
-      - LOG_MONGO_URI=mongodb://${LOG_MONGO_USER}:${LOG_MONGO_PASSWORD}@mongodb:27017/${LOG_DB_NAME}?authSource=admin
+      - LOG_MONGO_URI=mongodb://${LOG_MONGO_USER}:${LOG_MONGO_PASSWORD}@mongodb:27017/${LOG_DB_NAME}?authSource=${LOG_DB_NAME}
       - LOG_DB_NAME=${LOG_DB_NAME}
       - LOG_COLLECTION_NAME=logs
       - LOG_LEVEL=${LOG_LEVEL:-info}

@@ -1,7 +1,7 @@
 from typing import Optional
 from datetime import datetime
 from decimal import Decimal
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, field_validator
 
 # Shared properties
 class ServiceBase(BaseModel):
@@ -10,6 +10,18 @@ class ServiceBase(BaseModel):
     duration: int
     price: Optional[Decimal] = None
     active: Optional[bool] = True
+
+    @field_validator('duration')
+    def validate_duration(cls, v):
+        if v < 15:
+            raise ValueError('Duration must be at least 15 minutes')
+        return v
+
+    @field_validator('price')
+    def validate_price(cls, v):
+        if v is not None and v <= 0:
+            raise ValueError('Price must be positive')
+        return v
 
 # Properties to receive via API on creation
 class ServiceCreate(ServiceBase):

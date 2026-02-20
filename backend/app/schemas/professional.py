@@ -30,9 +30,12 @@ class ProfessionalInDBBase(ProfessionalBase):
     
     model_config = ConfigDict(from_attributes=True)
 
+from app.schemas.service import Service
+
 # Additional properties to return via API
 class Professional(ProfessionalInDBBase):
     user: Optional[User] = None
+    services: List[Service] = []
 
 # Additional properties stored in DB
 class ProfessionalInDB(ProfessionalInDBBase):

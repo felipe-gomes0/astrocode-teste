@@ -1,9 +1,10 @@
+
 from typing import Any, List
 from datetime import datetime
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, Query, BackgroundTasks
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 
 from app.api import deps
 from app.models.appointment import Appointment
@@ -62,7 +63,16 @@ def create_appointment(
         duration=service.duration,
     )
 
+    # Re-query with joined models to avoid lazy-loading issues during serialization
+    appointment = db.query(Appointment).options(
+        joinedload(Appointment.professional).joinedload(Professional.user),
+        joinedload(Appointment.client),
+        joinedload(Appointment.service)
+    ).filter(Appointment.id == appointment.id).first()
+
     return appointment
+
+from sqlalchemy.orm import joinedload
 
 @router.get("/my-appointments", response_model=List[AppointmentSchema])
 def read_my_appointments(
@@ -74,12 +84,19 @@ def read_my_appointments(
     """
     Retrieve appointments for the current user (as client or professional).
     """
+    # Eager load relationships needed for response properties
+    query = db.query(Appointment).options(
+        joinedload(Appointment.professional).joinedload(Professional.user),
+        joinedload(Appointment.service),
+        joinedload(Appointment.client)
+    )
+
     if current_user.type == "professional" and current_user.professional:
-        appointments = db.query(Appointment).filter(
+        appointments = query.filter(
             Appointment.professional_id == current_user.professional.id
         ).offset(skip).limit(limit).all()
     else:
-        appointments = db.query(Appointment).filter(
+        appointments = query.filter(
             Appointment.client_id == current_user.id
         ).offset(skip).limit(limit).all()
         

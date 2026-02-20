@@ -1,0 +1,30 @@
+@use '../../../../variables' as *;
+
+.services-container {
+  padding: $space-6;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $space-6;
+
+  h1 {
+      margin: 0;
+      color: $gray-800;
+  }
+}
+
+.full-width-table {
+  width: 100%;
+}
+
+.empty-state {
+  text-align: center;
+  padding: $space-12;
+  color: $gray-600;
+  background-color: $gray-50;
+}

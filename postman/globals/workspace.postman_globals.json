@@ -1,7 +1,16 @@
 {
   "id": "6f12e68d-156c-41fc-bfdc-141665bc5aee",
   "name": "Globals",
-  "values": [],
+  "values": [
+    {
+      "key": "token",
+      "value": "",
+      "enabled": true,
+      "type": "default",
+      "description": ""
+    }
+  ],
   "_postman_variable_scope": "globals",
-  "_postman_exported_at": "2026-02-11T19:57:27.974Z"
+  "_postman_exported_at": "2026-02-15T21:51:16.524Z",
+  "_postman_exported_using": "Postman/11.0.0"
 }

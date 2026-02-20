@@ -1,0 +1,131 @@
+<div class="block-manager-container">
+  
+  <div class="block-header">
+    <h1 class="page-title">Gerenciador de Bloqueios</h1>
+    <p class="page-subtitle">Defina períodos de indisponibilidade na sua agenda.</p>
+  </div>
+
+  <div class="block-form-card">
+    <div class="decorative-circle"></div>
+
+    <div class="card-content">
+      <h2 class="card-title">
+        Cadastro de Bloqueio de data
+      </h2>
+
+      <form [formGroup]="blockForm" (ngSubmit)="addBlock()" class="block-form">
+        
+        <mat-form-field appearance="outline" class="form-field full-width">
+          <mat-label>Motivo do Bloqueio</mat-label>
+          <input matInput formControlName="reason" placeholder="Ex: Consulta Médica, Férias...">
+          <mat-icon matSuffix>edit_note</mat-icon>
+        </mat-form-field>
+
+        <div class="form-row">
+          
+          <div class="date-group">
+             <span class="group-label">Início</span>
+             <div class="inputs-row">
+               <mat-form-field appearance="outline" class="form-field flex-1 bg-white">
+                 <mat-label>Data</mat-label>
+                 <input matInput [matDatepicker]="startPicker" formControlName="startDate" appInputMask="date">
+                 <mat-datepicker-toggle matIconSuffix [for]="startPicker"></mat-datepicker-toggle>
+                 <mat-datepicker #startPicker></mat-datepicker>
+               </mat-form-field>
+               <mat-form-field appearance="outline" class="form-field w-small bg-white">
+                 <mat-label>Hora</mat-label>
+                 <input matInput formControlName="startTime" appInputMask="time" placeholder="00:00">
+               </mat-form-field>
+             </div>
+          </div>
+
+          <div class="date-group">
+             <span class="group-label">Fim</span>
+             <div class="inputs-row">
+               <mat-form-field appearance="outline" class="form-field flex-1 bg-white">
+                 <mat-label>Data</mat-label>
+                 <input matInput [matDatepicker]="endPicker" formControlName="endDate" appInputMask="date">
+                 <mat-datepicker-toggle matIconSuffix [for]="endPicker"></mat-datepicker-toggle>
+                 <mat-datepicker #endPicker></mat-datepicker>
+               </mat-form-field>
+               <mat-form-field appearance="outline" class="form-field w-small bg-white">
+                 <mat-label>Hora</mat-label>
+                 <input matInput formControlName="endTime" appInputMask="time" placeholder="00:00">
+               </mat-form-field>
+             </div>
+          </div>
+
+        </div>
+
+        <div class="form-actions">
+          <button mat-flat-button color="warn" class="submit-btn" [disabled]="loading">
+            <span *ngIf="!loading">Confirmar Bloqueio</span>
+            <span *ngIf="loading">Processando...</span>
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <div class="calendar-layout">
+    
+    <div class="calendar-card">
+      <div class="calendar-header-custom">
+        <mat-icon>calendar_month</mat-icon>
+        <h3>Visão Geral</h3>
+      </div>
+      <div class="calendar-wrapper">
+        <mat-calendar 
+          [selected]="selectedDate" 
+          (selectedChange)="onDateSelect($event)"
+          [dateClass]="dateClass"
+          class="custom-main-calendar">
+        </mat-calendar>
+      </div>
+      
+      <div class="calendar-legend">
+        <div class="legend-item">
+          <div class="dot blocked"></div>
+          <span>Bloqueado</span>
+        </div>
+        <div class="legend-item">
+          <div class="dot selected"></div>
+          <span>Selecionado</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="details-card">
+      <div class="details-header">
+        <div class="date-info">
+          <span class="details-label">Detalhes do Dia</span>
+          <h2 class="details-date">{{ selectedDate | date:'dd MMM, yyyy' }}</h2>
+        </div>
+      </div>
+
+      <div class="details-content">
+        
+        <div class="day-blocks-list">
+          <ng-container *ngFor="let block of blocks">
+            <div *ngIf="isBlockActiveOnDate(block, selectedDate)" 
+                 class="mini-block-card">
+              <div class="mini-card-time">
+                {{ block.start_time | date:'dd/MM HH:mm' }} - {{ block.end_time | date:'dd/MM HH:mm' }}
+              </div>
+              <div class="mini-card-reason">
+                {{ block.reason || 'Indisponível' }}
+              </div>
+              <button mat-icon-button (click)="deleteBlock(block)" class="mini-delete-btn">
+                <mat-icon>close</mat-icon>
+              </button>
+            </div>
+          </ng-container>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+</div>

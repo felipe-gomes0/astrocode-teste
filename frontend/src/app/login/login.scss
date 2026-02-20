@@ -1,3 +1,5 @@
+@use '../../variables' as *;
+
 .login-container {
   display: flex;
   justify-content: center;
@@ -9,11 +11,11 @@
 .login-card {
   width: 100%;
   max-width: 25rem;
-  padding: 1.25rem;
+  padding: $space-5;
 }
 
 mat-card-header {
-  margin-bottom: 1.25rem;
+  margin-bottom: $space-5;
   justify-content: center;
   text-align: center;
 }
@@ -34,8 +36,8 @@ mat-card-header {
 }
 
 mat-icon {
-  font-size: 1.5rem;
-  width: 1.5rem;
-  height: 1.5rem;
-  line-height: 1.5rem;
+  font-size: $space-6;
+  width: $space-6;
+  height: $space-6;
+  line-height: $space-6;
 }

@@ -1,0 +1,201 @@
+{
+  "info": {
+    "_postman_id": "9f73ede0-3bbf-4c75-8fdb-59cca306adf0",
+    "name": "Astrocode Teste API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "List Users",
+          "id": "cd44ce7e-2726-4a4d-a534-c637517abf4c",
+          "request": {
+            "auth": {
+              "type": "bearer"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/users/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "users",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create User",
+          "id": "0b2ac650-4f7f-456c-b37c-2072375e2d22",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"admin@admin.com\",\n    \"name\": \"New admin\",\n    \"password\": \"12393712\",\n    \"type\": \"client\",\n    \"phone\": \"11999999999\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/users/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "users",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get User by ID",
+          "id": "aba9eac0-eafd-4773-a750-a7b3cae90b81",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/users/019c441f-9306-7d40-afc0-6e5de8b5177e",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "users",
+                "019c441f-9306-7d40-afc0-6e5de8b5177e"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update User",
+          "id": "400c38a0-f958-48a6-a8f2-328fd847353f",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Updated Name\",\n    \"phone\": \"11888888888\",\n    \"email\": \"updatdaseedasdsadsamaildasemail.com\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/users/019c441f-9306-7d40-afc0-6e5de8b5177e",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "users",
+                "019c441f-9306-7d40-afc0-6e5de8b5177e"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete User",
+          "id": "adbbae2d-f373-43aa-8aea-a86b72ea18fd",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/users/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "users",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "id": "460a9c20-9c3f-437f-b667-e5717d990239"
+    },
+    {
+      "name": "Auth",
+      "item": [],
+      "id": "769feb9e-7b53-4b32-a93f-282da4636dd4"
+    },
+    {
+      "name": "Professionals",
+      "item": [],
+      "id": "74eabb6c-c8c6-45a4-a59d-010ccb198169"
+    },
+    {
+      "name": "Services",
+      "item": [],
+      "id": "f9e39028-109f-42e9-995e-a6127afaa7ae"
+    },
+    {
+      "name": "Appointments",
+      "item": [],
+      "id": "6fdc1739-4c43-4d31-94ed-480065eb3688"
+    },
+    {
+      "name": "Clients",
+      "item": [],
+      "id": "e1894831-3095-44b4-97ae-a1bbcaa228f6"
+    },
+    {
+      "name": "Reviews",
+      "item": [],
+      "id": "2d8ddb30-a26b-4682-bbc3-96671f4a4b0e"
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ],
+        "id": "af2928dc-1c6d-4b05-9542-1765c2304e5b"
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ],
+        "id": "07acc907-445b-46ed-a0d8-32b46df7494b"
+      }
+    }
+  ],
+  "variable": [
+    {
+      "id": "b29ac39f-45a8-4b51-bd73-44adb997863e",
+      "key": "base_url",
+      "value": "http://localhost:8000",
+      "type": "string"
+    }
+  ]
+}

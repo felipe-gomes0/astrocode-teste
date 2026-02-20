@@ -1,0 +1,90 @@
+@use '../../../../variables' as *;
+
+.booking-container {
+  padding: $space-6;
+  display: flex;
+  justify-content: center;
+}
+
+.booking-card {
+  max-width: 600px;
+  width: 100%;
+}
+
+.professional-info {
+  display: flex;
+  gap: $space-4;
+  align-items: center;
+  margin-bottom: $space-6;
+
+  img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: $space-4;
+}
+
+.slots-container {
+  margin-bottom: $space-6;
+
+  label {
+    display: block;
+    margin-bottom: $space-2;
+    color: $gray-600;
+    font-size: 14px;
+  }
+}
+
+.no-slots {
+  text-align: center;
+  color: #f44336;
+  margin-bottom: $space-6;
+  padding: $space-4;
+  background-color: #ffebee;
+  border-radius: $radius;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: $space-4;
+  margin-top: $space-6;
+}
+
+.loading-state,
+.error-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: $space-6;
+  text-align: center;
+  width: 100%;
+  max-width: 400px;
+
+  p {
+    margin-top: $space-4;
+    color: $gray-600;
+  }
+}
+
+.error-text {
+  color: #f44336;
+  font-weight: 500;
+  margin-bottom: $space-4;
+}
+
+.loading-slots {
+  display: flex;
+  align-items: center;
+  gap: $space-3;
+  padding: $space-4;
+  color: $gray-600;
+  justify-content: center;
+}

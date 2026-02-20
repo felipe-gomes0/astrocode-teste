@@ -1,13 +1,19 @@
 from typing import Optional
 from datetime import time
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, model_validator
 
 # Shared properties
 class WorkingHoursBase(BaseModel):
-    day: int
+    day_of_week: int
     start_time: time
     end_time: time
     active: Optional[bool] = True
+
+    @model_validator(mode='after')
+    def validate_times(self) -> 'WorkingHoursBase':
+        if self.start_time >= self.end_time:
+            raise ValueError('End time must be after start time')
+        return self
 
 # Properties to receive via API on creation
 class WorkingHoursCreate(WorkingHoursBase):
@@ -15,7 +21,7 @@ class WorkingHoursCreate(WorkingHoursBase):
 
 # Properties to receive via API on update
 class WorkingHoursUpdate(BaseModel):
-    day: Optional[int] = None
+    day_of_week: Optional[int] = None
     start_time: Optional[time] = None
     end_time: Optional[time] = None
     active: Optional[bool] = None

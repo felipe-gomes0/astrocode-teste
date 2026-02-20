@@ -1,0 +1,281 @@
+@use '../../../../variables' as *;
+
+:host {
+  display: block;
+  min-height: 100%;
+  background-color: $gray-50; 
+}
+
+.block-manager-container {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding: $space-4; 
+  max-width: 72rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  @media (min-width: 768px) {
+    padding: $space-8; 
+  }
+}
+
+.block-header {
+  margin-bottom: $space-8; 
+  border-bottom: 1px solid $gray-100;
+  padding-bottom: $space-4;
+  width: 100%;  
+
+  .page-title {
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-bold;
+    color: $gray-900;
+  }
+
+  .page-subtitle {
+    color: $gray-500;
+    margin-top: $space-1; 
+  }
+}
+
+.block-form-card {
+  background-color: $white;
+  border: 1px solid $gray-100;
+  border-radius: $radius-xl;
+  padding: $space-6; 
+  margin-bottom: $space-10;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+
+  .decorative-circle {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 4rem; 
+    height: 4rem;
+    background-color: $primary-light;
+    border-radius: $radius-full;
+    transform: translate(1.5rem, -1.5rem); 
+    opacity: 0.5;
+  }
+
+  .card-content {
+    position: relative;
+    z-index: 10;
+  }
+}
+
+.card-title {
+  font-size: $font-size-lg; 
+  font-weight: 600; 
+  color: $gray-800;
+  margin-bottom: $space-6; 
+  display: flex;
+  align-items: center;
+  gap: $space-2; 
+
+  .icon-wrapper {
+    padding: $space-2;
+    background-color: $primary-light;
+    color: $red-600; 
+    border-radius: $radius-lg; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    mat-icon { transform: scale(0.9); }
+  }
+}
+
+.block-form { display: flex; flex-direction: column; gap: $space-6; }
+.form-row { display: grid; grid-template-columns: 1fr; gap: $space-6; @media (min-width: 768px) { grid-template-columns: repeat(2, 1fr); } }
+.date-group { background-color: $gray-50; padding: $space-4; border-radius: 0.75rem; border: 1px solid $gray-100; display: flex; flex-direction: column; gap: $space-3; .group-label { font-size: $font-size-xs; font-weight: $font-weight-bold; color: $gray-400; text-transform: uppercase; } .inputs-row { display: flex; gap: $space-3; .form-field.flex-1 { flex: 1; } .form-field.w-small { width: 7rem; } } }
+.form-field { width: 100%; } .full-width { width: 100%; }
+.form-actions { display: flex; justify-content: flex-end; padding-top: $space-2; .submit-btn { padding: $space-6 $space-8 !important; border-radius: 0.75rem !important; font-size: $font-size-base !important; box-shadow: 0 10px 15px -3px rgba(254, 226, 226, 0.5); } }
+
+.calendar-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $space-6;
+  width: 100%;
+  margin: 0 auto;
+
+  @media (min-width: 768px) {
+    grid-template-columns: 1.5fr 1fr; 
+  }
+}
+
+.calendar-card {
+  background-color: $white;
+  border: 1px solid $gray-100;
+  border-radius: $radius-xl;
+  padding: $space-6;
+  height: fit-content;
+
+  .calendar-header-custom {
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+    margin-bottom: $space-4;
+    color: $gray-800;
+    font-weight: 600;
+  }
+
+  .calendar-wrapper {
+    .custom-main-calendar {
+      width: 100% !important;
+    }
+  }
+
+  .calendar-legend {
+    display: flex;
+    justify-content: center;
+    gap: $space-6;
+    margin-top: $space-4;
+    padding-top: $space-4;
+    border-top: 1px solid $gray-100;
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: $space-2;
+      font-size: $font-size-xs;
+      color: $gray-500;
+      
+      .dot {
+        width: 0.75rem;
+        height: 0.75rem;
+        border-radius: 50%;
+        
+        &.blocked { background-color: $primary-light; border: 1px solid $primary-color; }
+        &.selected { background-color: $gray-800; }
+      }
+    }
+  }
+}
+
+.details-card {
+  background-color: $white;
+  border: 1px solid $gray-100;
+  border-radius: $radius-xl;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: 25rem;
+}
+
+.details-header {
+  padding: $space-6;
+  border-bottom: 1px solid $gray-100;
+  background-color: $gray-50;
+
+  .date-info {
+    .details-label {
+      font-size: $font-size-xs;
+      font-weight: $font-weight-bold;
+      color: $gray-400;
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: $space-1;
+    }
+    .details-date {
+      font-size: $font-size-xl;
+      font-weight: $font-weight-bold;
+      color: $gray-800;
+      margin: 0;
+    }
+  }
+}
+
+.details-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: $space-4;
+}
+
+.day-blocks-list {
+  display: flex;
+  flex-direction: column;
+  gap: $space-3;
+}
+
+.mini-block-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: $white;
+  border: 1px solid $gray-200;
+  border-radius: $radius-lg;
+  padding: $space-3;
+  transition: all 0.2s;
+
+  &:hover {
+    border-color: $primary-color;
+    background-color: $primary-light;
+  }
+
+  .mini-card-time {
+    font-size: $font-size-sm;
+    font-weight: 600;
+    color: $gray-800;
+  }
+
+  .mini-card-reason {
+    font-size: $font-size-xs;
+    color: $gray-500;
+    margin: 0 $space-2;
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .mini-delete-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 2rem;
+    height: 2rem;
+    line-height: 2rem;
+    color: $gray-400;
+    
+    mat-icon { font-size: $font-size-xl; }
+
+    &:hover { color: $primary-color; }
+  }
+}
+.custom-main-calendar {
+  .blocked-day {
+      
+      .mat-calendar-body-cell-content {
+          background-color: #fee2e2 ; /* red-100 */
+          color: #991b1b ; /* red-800 */
+          border-radius: 50%;
+          border: 1px solid #ef4444 ; /* red-500 */
+      }
+      
+  }
+}
+
+::ng-deep .custom-main-calendar .mat-calendar-body-selected {
+  background-color: $gray-800;
+  color: $white;
+}
+
+::ng-deep .form-field .mat-mdc-form-field-flex {
+  background-color: $white;
+  border-radius: 0.75rem;
+  padding: 0 $space-4;
+  border: 1px solid $gray-200;
+}
+::ng-deep .form-field.mat-focused .mat-mdc-form-field-flex {
+  border-color: $primary-color;
+  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.1);
+}
+::ng-deep .form-field .mat-mdc-form-field-subscript-wrapper { display: none; }
+::ng-deep .form-field .mat-mdc-text-field-wrapper { padding: 0; }
+::ng-deep .form-field .mat-mdc-form-field-infix { padding-top: 0.875rem !important; padding-bottom: 0.875rem !important; min-height: unset !important; }

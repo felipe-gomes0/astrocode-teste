@@ -31,6 +31,8 @@ export class AppComponent {
   user$ = this.authService.currentUser;
   UserType = UserType;
 
+  title = 'frontend';
+
   logout(): void {
     this.authService.logout();
   }

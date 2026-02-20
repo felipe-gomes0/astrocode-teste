@@ -1,8 +1,8 @@
 export enum AppointmentStatus {
-  PENDENTE = 'pendente',
-  CONFIRMADO = 'confirmado',
-  CANCELADO = 'cancelado',
-  CONCLUIDO = 'concluido'
+  PENDING = 'pending',
+  CONFIRMED = 'confirmed',
+  CANCELLED = 'cancelled',
+  COMPLETED = 'completed'
 }
 
 export interface Appointment {
@@ -10,10 +10,10 @@ export interface Appointment {
   professional_id: number;
   client_id: string; // UUID
   service_id: number;
-  data_hora: string;
-  duracao: number;
+  date_time: string;
+  duration: number;
   status: AppointmentStatus;
-  observacoes?: string;
+  notes?: string;
   created_at: string;
   updated_at: string;
 }

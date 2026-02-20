@@ -1,8 +1,8 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { switchMap, tap } from 'rxjs/operators';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { catchError, switchMap, tap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { LoginCredentials, User } from '../models/user.model';
 
@@ -23,16 +23,24 @@ export class AuthService {
   public currentUser = this.currentUserSubject.asObservable();
 
   constructor() {
-    this.loadUserFromStorage();
   }
 
-  private loadUserFromStorage(): void {
+  loadUserFromStorage(): Observable<any> {
     const token = localStorage.getItem('token');
     if (token) {
-      this.fetchCurrentUser().subscribe({
-          error: () => this.logout() // Invalid token
-      });
+      return this.fetchCurrentUser().pipe(
+          tap({
+              error: (err) => {
+                  if (err.status === 401) {
+                      this.logout();
+                  }
+              }
+          }),
+          // Catch error so app doesn't crash on init
+          catchError(() => of(null))
+      );
     }
+    return of(null);
   }
 
   login(credentials: LoginCredentials): Observable<User> {
@@ -50,6 +58,18 @@ export class AuthService {
           localStorage.setItem('token', response.access_token);
         }),
         switchMap(() => this.fetchCurrentUser())
+      );
+  }
+
+  register(user: Partial<User>): Observable<User> {
+      return this.http.post<User>(`${environment.apiUrl}/users/`, user);
+  }
+
+  updateUser(userId: string, user: Partial<User>): Observable<User> {
+      return this.http.put<User>(`${environment.apiUrl}/users/${userId}`, user).pipe(
+          tap((updatedUser) => {
+              this.currentUserSubject.next(updatedUser);
+          })
       );
   }
 

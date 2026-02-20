@@ -32,7 +32,7 @@ def get_current_user(
     except (JWTError, ValidationError):
         logger.warning("Failed to validate credentials")
         raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
+            status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Could not validate credentials",
         )
     user = crud_user.get(db, id=token_data.sub)
