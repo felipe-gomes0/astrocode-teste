@@ -5,6 +5,37 @@
     <mat-tab label="Perfil Profissional">
       <div class="tab-content">
         <form [formGroup]="profileForm" (ngSubmit)="updateProfile()">
+
+            <!-- Photo Upload -->
+            <div class="photo-upload-section">
+              <div class="avatar-wrapper" (click)="fileInput.click()">
+                <img
+                  *ngIf="photoPreview"
+                  [src]="photoPreview"
+                  alt="Foto do profissional"
+                  class="avatar-img"
+                />
+                <div *ngIf="!photoPreview" class="avatar-placeholder">
+                  <mat-icon>person</mat-icon>
+                </div>
+                <div class="avatar-overlay" *ngIf="!uploadingPhoto">
+                  <mat-icon>camera_alt</mat-icon>
+                  <span>Alterar</span>
+                </div>
+                <div class="avatar-loading" *ngIf="uploadingPhoto">
+                  <mat-spinner diameter="32"></mat-spinner>
+                </div>
+              </div>
+              <input
+                #fileInput
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                hidden
+                (change)="onFileSelected($event)"
+              />
+              <p class="photo-hint">Clique para alterar a foto. JPG, PNG ou WebP, máximo 5MB.</p>
+            </div>
+
             <mat-form-field appearance="outline" class="full-width">
                 <mat-label>Especialidade</mat-label>
                 <input matInput formControlName="speciality" placeholder="Ex: Desenvolvedor, Eletricista">
@@ -18,11 +49,6 @@
             <mat-form-field appearance="outline" class="full-width">
                 <mat-label>Endereço</mat-label>
                 <input matInput formControlName="address">
-            </mat-form-field>
-
-            <mat-form-field appearance="outline" class="full-width">
-                <mat-label>URL da Foto</mat-label>
-                <input matInput formControlName="photo_url">
             </mat-form-field>
 
             <div class="actions">
@@ -43,13 +69,13 @@
                           <input type="checkbox" formControlName="active">
                           {{ day.value.dayName }}
                       </div>
-                      
+
                       <div class="times" *ngIf="day.value.active">
                           <mat-form-field appearance="outline" class="time-input">
                               <mat-label>Início</mat-label>
                               <input matInput type="time" formControlName="start">
                           </mat-form-field>
-                          
+
                           <span>até</span>
 
                           <mat-form-field appearance="outline" class="time-input">
