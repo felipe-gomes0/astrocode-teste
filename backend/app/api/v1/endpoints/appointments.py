@@ -2,7 +2,7 @@ from typing import Any, List
 from datetime import datetime
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, BackgroundTasks
 from sqlalchemy.orm import Session
 
 from app.api import deps
@@ -23,6 +23,7 @@ def create_appointment(
     db: Session = Depends(deps.get_db),
     appointment_in: AppointmentCreate,
     current_user: User = Depends(deps.get_current_active_user),
+    background_tasks: BackgroundTasks,
 ) -> Any:
     """
     Create new appointment.
@@ -50,8 +51,9 @@ def create_appointment(
     db.commit()
     db.refresh(appointment)
 
-    # Send confirmation email (async, non-blocking)
-    send_appointment_confirmation(
+    # Queue confirmation email to be sent in the background using FastAPI's queue
+    background_tasks.add_task(
+        send_appointment_confirmation,
         client_name=current_user.name,
         client_email=current_user.email,
         date_time=appointment_in.date_time,
