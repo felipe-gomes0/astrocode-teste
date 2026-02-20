@@ -15,6 +15,7 @@ uuid6
 jinja2
 resend
 
+motor
 httpx
 pytest
 gunicorn
