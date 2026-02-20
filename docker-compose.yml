@@ -1,5 +1,6 @@
 services:
   backend:
+    container_name: backend
     build:
       context: ./backend
       dockerfile: Dockerfile.dev
@@ -27,6 +28,7 @@ services:
         max-file: "5"
 
   frontend:
+    container_name: frontend
     build:
       context: ./frontend
       dockerfile: Dockerfile.dev
@@ -46,6 +48,7 @@ services:
         max-file: "5"
 
   db:
+    container_name: db
     image: postgres:15-alpine
     environment:
       - POSTGRES_USER=${POSTGRES_USER}

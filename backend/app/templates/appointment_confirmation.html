@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Confirmação de Agendamento</title>
+</head>
+<body style="margin:0;padding:0;background-color:#f4f7fa;font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f4f7fa;padding:32px 0;">
+    <tr>
+      <td align="center">
+        <table role="presentation" width="560" cellpadding="0" cellspacing="0" style="background-color:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
+
+          <!-- Header -->
+          <tr>
+            <td style="background:linear-gradient(135deg,#0ea5e9,#06b6d4);padding:32px 40px;text-align:center;">
+              <h1 style="margin:0;color:#ffffff;font-size:22px;font-weight:700;letter-spacing:-0.3px;">
+                ✅ Agendamento Confirmado
+              </h1>
+            </td>
+          </tr>
+
+          <!-- Body -->
+          <tr>
+            <td style="padding:32px 40px;">
+              <p style="margin:0 0 20px;font-size:16px;color:#334155;line-height:1.6;">
+                Olá, <strong>{{ client_name }}</strong>!
+              </p>
+              <p style="margin:0 0 24px;font-size:15px;color:#475569;line-height:1.6;">
+                Seu agendamento foi registrado com sucesso. Confira os detalhes abaixo:
+              </p>
+
+              <!-- Info Card -->
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f0f9ff;border-radius:8px;border:1px solid #e0f2fe;">
+                <tr>
+                  <td style="padding:24px;">
+                    <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                      <tr>
+                        <td style="padding:8px 0;vertical-align:top;width:28px;">
+                          <span style="font-size:18px;">📅</span>
+                        </td>
+                        <td style="padding:8px 0 8px 8px;">
+                          <span style="font-size:12px;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;">Data e Horário</span><br>
+                          <span style="font-size:15px;color:#0f172a;font-weight:600;">{{ date_time }}</span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td colspan="2" style="padding:0;"><hr style="border:none;border-top:1px solid #e0f2fe;margin:4px 0;"></td>
+                      </tr>
+                      <tr>
+                        <td style="padding:8px 0;vertical-align:top;width:28px;">
+                          <span style="font-size:18px;">💇</span>
+                        </td>
+                        <td style="padding:8px 0 8px 8px;">
+                          <span style="font-size:12px;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;">Serviço</span><br>
+                          <span style="font-size:15px;color:#0f172a;font-weight:600;">{{ service_name }}</span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td colspan="2" style="padding:0;"><hr style="border:none;border-top:1px solid #e0f2fe;margin:4px 0;"></td>
+                      </tr>
+                      <tr>
+                        <td style="padding:8px 0;vertical-align:top;width:28px;">
+                          <span style="font-size:18px;">👤</span>
+                        </td>
+                        <td style="padding:8px 0 8px 8px;">
+                          <span style="font-size:12px;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;">Profissional</span><br>
+                          <span style="font-size:15px;color:#0f172a;font-weight:600;">{{ professional_name }}</span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td colspan="2" style="padding:0;"><hr style="border:none;border-top:1px solid #e0f2fe;margin:4px 0;"></td>
+                      </tr>
+                      <tr>
+                        <td style="padding:8px 0;vertical-align:top;width:28px;">
+                          <span style="font-size:18px;">⏱️</span>
+                        </td>
+                        <td style="padding:8px 0 8px 8px;">
+                          <span style="font-size:12px;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;">Duração</span><br>
+                          <span style="font-size:15px;color:#0f172a;font-weight:600;">{{ duration }} minutos</span>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+
+              <p style="margin:24px 0 0;font-size:14px;color:#64748b;line-height:1.6;">
+                Caso precise cancelar ou reagendar, acesse a plataforma clicando no botão abaixo.
+              </p>
+
+              <!-- CTA Button -->
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td align="center" style="padding:24px 0 8px;">
+                    <a href="#" style="display:inline-block;padding:12px 32px;background:linear-gradient(135deg,#0ea5e9,#06b6d4);color:#ffffff;text-decoration:none;border-radius:8px;font-size:14px;font-weight:600;letter-spacing:0.3px;">
+                      Ver Meus Agendamentos
+                    </a>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td style="padding:20px 40px;background-color:#f8fafc;border-top:1px solid #e2e8f0;text-align:center;">
+              <p style="margin:0;font-size:12px;color:#94a3b8;line-height:1.5;">
+                Este é um e-mail automático. Por favor, não responda.<br>
+                © {{ current_year if current_year else "2026" }} Astrocode • Todos os direitos reservados
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
