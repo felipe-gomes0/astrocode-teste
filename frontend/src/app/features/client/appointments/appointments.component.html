@@ -30,6 +30,9 @@
             <mat-icon inline>attach_money</mat-icon> R$ {{ appointment.service_price | number:'1.2-2' }}
           </span>
         </div>
+        <p class="notes" *ngIf="appointment.notes" style="margin-top: 8px; font-size: 0.9em; color: #555;">
+          <strong>Observações:</strong> {{ appointment.notes }}
+        </p>
       </div>
 
       <!-- Status & Actions Block -->
