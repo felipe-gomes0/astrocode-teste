@@ -37,6 +37,7 @@ class Settings(BaseSettings):
     CLOUDINARY_API_SECRET: str = ""
 
     DATABASE_URL: Optional[str] = None
+    FRONTEND_URL: str = "http://localhost:4200"
 
     model_config = SettingsConfigDict(
         env_file=(".env", "../.env"),
