@@ -18,8 +18,12 @@ class Settings(BaseSettings):
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 120
 
-    # CORS
-    BACKEND_CORS_ORIGINS: list[str] = ["http://localhost:4200", "http://localhost:8000"]
+    # CORS — configure via env var for production (JSON array)
+    BACKEND_CORS_ORIGINS: list[str] = [
+        "http://localhost:4200",
+        "http://localhost:8000",
+        "http://localhost:3000",
+    ]
 
     # Email (Resend)
     RESEND_API_KEY: Optional[str] = None

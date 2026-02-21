@@ -31,5 +31,6 @@ RUN apt-get update && apt-get install -y \
 COPY --from=builder /root/.local /root/.local
 COPY . .
 
-# Use gunicorn for production
-CMD ["gunicorn", "app.main:app", "--workers", "4", "--worker-class", "uvicorn.workers.UvicornWorker", "--bind", "0.0.0.0:8000"]
+# Use gunicorn for production — Railway injects $PORT
+ENV PORT=8000
+CMD gunicorn app.main:app --workers 4 --worker-class uvicorn.workers.UvicornWorker --bind 0.0.0.0:$PORT
