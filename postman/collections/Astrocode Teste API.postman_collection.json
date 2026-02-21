@@ -196,6 +196,12 @@
       "key": "base_url",
       "value": "http://localhost:8000",
       "type": "string"
+    },
+    {
+      "id": "production_url-1234",
+      "key": "production_url",
+      "value": "https://astrocode-teste-production.up.railway.app",
+      "type": "string"
     }
   ]
 }
