@@ -15,7 +15,12 @@ def get_mongo_client() -> AsyncIOMotorClient:
     """Get or create the Motor client singleton."""
     global _client
     if _client is None:
-        _client = AsyncIOMotorClient(log_settings.LOG_MONGO_URI)
+        _client = AsyncIOMotorClient(
+            log_settings.LOG_MONGO_URI,
+            serverSelectionTimeoutMS=5000,
+            connectTimeoutMS=5000,
+            socketTimeoutMS=5000,
+        )
     return _client
 
 
