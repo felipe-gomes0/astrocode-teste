@@ -38,6 +38,10 @@ class LogMiddleware(BaseHTTPMiddleware):
 
         start_time = time.perf_counter()
 
+        # Skip logging for healthcheck to avoid hitting DB and blocking the LB
+        if request.url.path == "/health":
+            return await call_next(request)
+
         # --- Process request ---
         try:
             response = await call_next(request)
