@@ -1,0 +1,98 @@
+<div class="settings-container">
+  <h1>Configurações</h1>
+
+  <mat-tab-group>
+    <mat-tab label="Perfil Profissional">
+      <div class="tab-content">
+        <form [formGroup]="profileForm" (ngSubmit)="updateProfile()">
+
+            <!-- Photo Upload -->
+            <div class="photo-upload-section">
+              <div class="avatar-wrapper" (click)="fileInput.click()">
+                <img
+                  *ngIf="photoPreview"
+                  [src]="photoPreview"
+                  alt="Foto do profissional"
+                  class="avatar-img"
+                />
+                <div *ngIf="!photoPreview" class="avatar-placeholder">
+                  <mat-icon>person</mat-icon>
+                </div>
+                <div class="avatar-overlay" *ngIf="!uploadingPhoto">
+                  <mat-icon>camera_alt</mat-icon>
+                  <span>Alterar</span>
+                </div>
+                <div class="avatar-loading" *ngIf="uploadingPhoto">
+                  <mat-spinner diameter="32"></mat-spinner>
+                </div>
+              </div>
+              <input
+                #fileInput
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                hidden
+                (change)="onFileSelected($event)"
+              />
+              <p class="photo-hint">Clique para alterar a foto. JPG, PNG ou WebP, máximo 5MB.</p>
+            </div>
+
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Especialidade</mat-label>
+                <input matInput formControlName="speciality" placeholder="Ex: Desenvolvedor, Eletricista">
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Bio / Descrição</mat-label>
+                <textarea matInput formControlName="description" rows="4"></textarea>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Endereço</mat-label>
+                <input matInput formControlName="address">
+            </mat-form-field>
+
+            <div class="actions">
+                <button mat-raised-button color="primary" type="submit" [disabled]="!profileForm.valid">
+                    Salvar Perfil
+                </button>
+            </div>
+        </form>
+      </div>
+    </mat-tab>
+
+    <mat-tab label="Horário de Trabalho">
+      <div class="tab-content">
+          <form [formGroup]="workingHoursForm" (ngSubmit)="updateWorkingHours()">
+              <div formArrayName="hours">
+                  <div *ngFor="let day of hoursArray.controls; let i=index" [formGroupName]="i" class="hours-row">
+                      <div class="day-label">
+                          <input type="checkbox" formControlName="active">
+                          {{ day.value.dayName }}
+                      </div>
+
+                      <div class="times" *ngIf="day.value.active">
+                          <mat-form-field appearance="outline" class="time-input">
+                              <mat-label>Início</mat-label>
+                              <input matInput type="time" formControlName="start">
+                          </mat-form-field>
+
+                          <span>até</span>
+
+                          <mat-form-field appearance="outline" class="time-input">
+                              <mat-label>Fim</mat-label>
+                              <input matInput type="time" formControlName="end">
+                          </mat-form-field>
+                      </div>
+                  </div>
+              </div>
+
+              <div class="actions">
+                  <button mat-raised-button color="primary" type="submit">
+                      Salvar Horários
+                  </button>
+              </div>
+          </form>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</div>

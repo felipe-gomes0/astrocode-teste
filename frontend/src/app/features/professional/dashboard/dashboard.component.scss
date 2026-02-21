@@ -1,0 +1,88 @@
+@use '../../../../variables' as *;
+
+.dashboard-container {
+  padding: $space-6;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  h1 {
+      margin-bottom: $space-6;
+      color: $gray-800; 
+  }
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: $space-6;
+  margin-bottom: $space-8;
+}
+
+.stat-card {
+  text-align: center;
+  
+  .stat-value {
+      font-size: 3rem;
+      font-weight: bold;
+      color: $secondary-color;
+  }
+
+  .stat-label {
+      color: $gray-600;
+      font-size: 0.9rem; 
+      text-transform: uppercase;
+      letter-spacing: 1px;
+  }
+
+  &.warn .stat-value {
+      color: $warning-color;
+  }
+}
+
+.tables-section {
+    margin-bottom: $space-6;
+}
+
+.full-width-table {
+    width: 100%;
+}
+
+.status-badge {
+    padding: 4px 12px;
+    border-radius: 9999px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    display: inline-block;
+
+    &.pending { background-color: #fff7ed; color: #ea580c; border: 1px solid #ffedd5; }
+    &.confirmed { background-color: #f0fdf4; color: #16a34a; border: 1px solid #dcfce7; }
+    &.cancelled { background-color: #fef2f2; color: #dc2626; border: 1px solid #fee2e2; }
+    &.completed { background-color: #f8fafc; color: #475569; border: 1px solid #e2e8f0; }
+}
+
+.action-btn {
+  border-radius: 8px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  padding: 0 16px;
+  transition: all 0.2s ease-in-out;
+  
+  &:hover {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    filter: brightness(1.05); /* Slightly lighten the background on hover */
+  }
+
+  &:active {
+    box-shadow: none;
+    filter: brightness(0.95);
+  }
+}
+
+.empty-state {
+    padding: $space-6;
+    text-align: center;
+    color: $gray-600; 
+    background-color: $gray-50;
+}

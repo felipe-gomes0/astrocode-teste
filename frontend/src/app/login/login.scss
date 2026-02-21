@@ -1,0 +1,43 @@
+@use '../../variables' as *;
+
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f5f5f5;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 25rem;
+  padding: $space-5;
+}
+
+mat-card-header {
+  margin-bottom: $space-5;
+  justify-content: center;
+  text-align: center;
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: 0.625rem;
+}
+
+.error-message {
+  color: #f44336;
+  text-align: center;
+  margin-bottom: 0.9375rem;
+}
+
+.actions {
+  margin-top: 0.625rem;
+}
+
+mat-icon {
+  font-size: $space-6;
+  width: $space-6;
+  height: $space-6;
+  line-height: $space-6;
+}

@@ -1,0 +1,127 @@
+@use '../../../../variables' as *;
+
+.settings-container {
+  padding: $space-6;
+  max-width: 800px;
+  margin: 0 auto;
+
+  .header {
+    margin-bottom: $space-8;
+
+    h1 {
+      margin: 0 0 $space-2 0;
+      color: $gray-800;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+
+    p {
+      margin: 0;
+      color: $gray-500;
+    }
+  }
+}
+
+.settings-card {
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05) !important;
+  border: 1px solid $gray-200;
+
+  mat-card-content {
+    padding: $space-6;
+  }
+}
+
+.form-section {
+  display: flex;
+  flex-direction: column;
+  gap: $space-4;
+  margin-bottom: $space-6;
+  margin-top: $space-6;
+
+  &:first-child {
+    margin-top: 0;
+  }
+
+  h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 500;
+    color: $gray-800;
+  }
+
+  .section-desc {
+    margin: 0 0 $space-4 0;
+    font-size: 14px;
+    color: $gray-500;
+  }
+
+  .full-width {
+    width: 100%;
+  }
+
+  .form-row {
+    display: flex;
+    gap: $space-4;
+    width: 100%;
+
+    @media (max-width: 600px) {
+      flex-direction: column;
+      gap: 0;
+      
+      .half-width {
+        width: 100%;
+      }
+    }
+
+    .half-width {
+      flex: 1;
+    }
+  }
+}
+
+mat-divider {
+  margin: $space-8 0;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: $space-8;
+
+  button {
+    padding: $space-2 $space-6;
+    height: 44px;
+    border-radius: 8px;
+  }
+}
+
+// Simple spinning effect for button loader
+.spin-icon {
+  animation: spin 1s linear infinite;
+  margin-right: 8px;
+}
+
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+::ng-deep .success-snackbar {
+  background-color: #f0fdf4 !important;
+  color: #16a34a !important;
+  
+  .mat-mdc-button {
+    color: #16a34a !important;
+  }
+}
+
+::ng-deep .error-snackbar {
+  background-color: #fef2f2 !important;
+  color: #dc2626 !important;
+  
+  .mat-mdc-button {
+    color: #dc2626 !important;
+  }
+}
