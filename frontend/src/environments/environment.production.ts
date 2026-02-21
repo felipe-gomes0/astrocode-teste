@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://RAILWAY_URL/api/v1'
+  apiUrl: 'https://astrocode-teste-production.up.railway.app/api/v1'
 };
