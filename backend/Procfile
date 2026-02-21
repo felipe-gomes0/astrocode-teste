@@ -1,1 +1,1 @@
-web: bash start.sh
+web: uvicorn app.main:app --host :: --port $PORT --proxy-headers --forwarded-allow-ips="*"

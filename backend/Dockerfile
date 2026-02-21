@@ -33,4 +33,4 @@ COPY . .
 
 # Use gunicorn for production — Railway injects $PORT
 ENV PORT=8000
-CMD ["bash", "start.sh"]
+CMD uvicorn app.main:app --host :: --port ${PORT:-8000} --proxy-headers --forwarded-allow-ips="*"
