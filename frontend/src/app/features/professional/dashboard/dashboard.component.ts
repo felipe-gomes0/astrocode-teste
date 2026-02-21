@@ -45,7 +45,7 @@ export class DashboardComponent implements OnInit {
   };
   loading = false;
 
-  displayedColumns: string[] = ['date_time', 'client', 'service', 'status', 'actions'];
+  displayedColumns: string[] = ['date_time', 'client', 'service', 'notes', 'status', 'actions'];
 
   ngOnInit(): void {
     this.loadAppointments();

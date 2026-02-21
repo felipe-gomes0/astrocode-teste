@@ -229,7 +229,7 @@ def update_appointment(
     db.refresh(appointment)
     return appointment
 
-@router.delete("/{id}", response_model=AppointmentSchema)
+@router.delete("/{id}")
 def delete_appointment(
     *,
     db: Session = Depends(deps.get_db),
@@ -248,6 +248,9 @@ def delete_appointment(
     ):
          raise HTTPException(status_code=403, detail="Not enough permissions")
 
-    db.delete(appointment)
+    from app.core.enums.appointment_status import AppointmentStatus
+    appointment.status = AppointmentStatus.CANCELLED
+    db.add(appointment)
     db.commit()
-    return appointment
+    db.refresh(appointment)
+    return {"message": "Agendamento cancelado com sucesso"}

@@ -27,7 +27,7 @@ class Settings(BaseSettings):
 
     # Email (Resend)
     RESEND_API_KEY: Optional[str] = None
-    EMAILS_FROM_ADDRESS: str = "<anything>@naraelo.resend.app"
+    EMAILS_FROM_ADDRESS: str = "contato@fgsoftware.digital"
     EMAILS_FROM_NAME: str = "Astrocode"
     EMAILS_ENABLED: bool = False
 
