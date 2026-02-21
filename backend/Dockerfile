@@ -33,4 +33,4 @@ COPY . .
 
 # Use gunicorn for production — Railway injects $PORT
 ENV PORT=8000
-CMD gunicorn app.main:app --workers 1 --worker-class uvicorn.workers.UvicornWorker --bind [::]:$PORT
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
