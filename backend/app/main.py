@@ -27,17 +27,6 @@ async def lifespan(app: FastAPI):
     # Startup
     Base.metadata.create_all(bind=engine)
     await create_log_indexes()
-    
-    # Run the initial database population (idempotent setup for standard professionals)
-    try:
-        from populate_db import populate
-        # Run synchronous DB code in a thread to prevent blocking event loop
-        import asyncio
-        await asyncio.to_thread(populate)
-        logger.info("Database populated with default data successfully.")
-    except Exception as e:
-        logger.error(f"Error during database population on startup: {e}")
-
     logger.info("Application started — MongoDB indexes ensured.")
     yield
     # Shutdown

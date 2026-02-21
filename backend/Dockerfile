@@ -33,4 +33,4 @@ COPY . .
 
 # Use gunicorn for production — Railway injects $PORT
 ENV PORT=8000
-CMD ["sh", "-c", "python populate_db.py && exec uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000} --proxy-headers --forwarded-allow-ips '*'"]
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--proxy-headers", "--forwarded-allow-ips", "*"]
