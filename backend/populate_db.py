@@ -3,7 +3,9 @@ from app.core.database import SessionLocal
 from app.models.user import User, UserType
 from app.models.professional import Professional
 from app.models.service import Service
+from app.models.working_hours import WorkingHours
 from passlib.context import CryptContext
+from datetime import time
 import uuid6
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -203,6 +205,17 @@ def populate():
                         description=f"Serviço de {s_data['name']}"
                     )
                     db.add(service)
+                
+                # Create Working Hours (Mon-Fri 09:00-18:00)
+                for day in range(5): # 0=Monday, 4=Friday
+                    wh = WorkingHours(
+                        professional_id=professional.id,
+                        day_of_week=day,
+                        start_time=time(9, 0),
+                        end_time=time(18, 0),
+                        active=True
+                    )
+                    db.add(wh)
                 
                 print(f"Created professional: {p_data['name']}")
             else:
