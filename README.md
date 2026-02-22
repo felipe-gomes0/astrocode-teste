@@ -224,8 +224,8 @@ docker compose exec backend python -m pytest tests/ -v
 
 ```bash
 # Conectar ao MongoDB e visualizar logs de auditoria
-docker compose exec mongodb_logs mongosh \
-  -u log_service -p logpass --authenticationDatabase app_logs app_logs
+docker compose exec mongodb mongosh -u log_service -p logpass --authenticationDatabase app_logs app_logs
+
 
 # Dentro do mongosh:
 db.logs.find().sort({timestamp: -1}).limit(5).pretty()
