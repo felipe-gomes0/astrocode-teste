@@ -70,10 +70,23 @@ export class RegisterComponent {
         this.router.navigate(['/login']);
       },
       error: (err) => {
-        this.loading = false;
-        console.error(err);
-        const msg = err.error?.detail || 'Erro ao cadastrar';
-        this.snackBar.open(msg, 'Fechar', { duration: 3000 });
+        // Usa setTimeout para evitar NG0100 caso o erro retorne imediatamente (em modo dev)
+        setTimeout(() => {
+          this.loading = false;
+          console.error('Registration Error:', err);
+          
+          let msg = 'Erro ao cadastrar';
+          if (err.error && err.error.detail) {
+            if (Array.isArray(err.error.detail)) {
+              // Extract the first validation error message
+              const firstError = err.error.detail[0];
+              msg = `${firstError.loc[firstError.loc.length - 1]}: ${firstError.msg}`;
+            } else if (typeof err.error.detail === 'string') {
+              msg = err.error.detail;
+            }
+          }
+          this.snackBar.open(msg, 'Fechar', { duration: 5000 });
+        });
       }
     });
   }
