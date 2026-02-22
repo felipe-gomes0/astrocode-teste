@@ -79,7 +79,7 @@ BACKEND_CORS_ORIGINS=["http://localhost:4200"]
 FRONTEND_URL=http://localhost:4200
 ```
 
-> ⚠️ **Serviços opcionais:** Cloudinary (upload de fotos) e Resend (envio de emails) funcionam sem configuração — apenas as features correspondentes ficam desabilitadas.
+> ⚠️ **Serviços opcionais:** Para utilizar o upload de fotos e o envio de emails no ambiente de desenvolvimento, **você precisará criar contas gratuitas e configurar as respectivas chaves no seu arquivo `.env`** (`CLOUDINARY_*` e `RESEND_*`). Caso você não faça essa configuração, a aplicação iniciará normalmente sem erros, mas essas funcionalidades ficarão desabilitadas.
 
 ```bash
 # 4. Suba todos os containers
