@@ -20,4 +20,4 @@ def test_login_access_token_invalid(client: TestClient) -> None:
     }
     r = client.post(f"{settings.API_V1_STR}/auth/access-token", data=login_data)
     assert r.status_code == 400
-    assert r.json()["detail"] == "Incorrect email or password"
+    assert r.json()["error"] == "Incorrect email or password"

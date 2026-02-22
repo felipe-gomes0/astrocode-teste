@@ -83,14 +83,14 @@ FRONTEND_URL=http://localhost:4200
 
 ```bash
 # 4. Suba todos os containers
+# 3. Inicie a aplicação
 docker compose up --build
+
+# O banco de dados será populado automaticamente na primeira execução!
 
 # 5. Aguarde até ver no terminal:
 #    backend   | INFO:     Uvicorn running on http://0.0.0.0:8000
 #    frontend  | ✔ Compiled successfully.
-
-# 6. Em outro terminal, popule o banco com dados de teste
-docker compose exec backend python -m app.initial_data
 ```
 
 ### ✅ Acessos após o setup
@@ -798,7 +798,6 @@ docker compose restart backend         # Reiniciar apenas o backend
 
 # ── Banco de dados ──
 docker compose exec backend alembic upgrade head         # Rodar migrations
-docker compose exec backend python -m app.initial_data   # Popular banco (seed)
 docker compose exec backend alembic revision --autogenerate -m "description"  # Nova migration
 
 # ── Debugging ──

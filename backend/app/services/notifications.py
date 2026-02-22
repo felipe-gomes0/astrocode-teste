@@ -38,6 +38,7 @@ async def send_appointment_confirmation(
     """Send appointment confirmation email (designed to run in BackgroundTasks)."""
     log_service = get_log_service()
     try:
+        from app.core.config import settings
         template = _jinja_env.get_template("appointment_confirmation.html")
         html = template.render(
             client_name=client_name,
@@ -45,6 +46,7 @@ async def send_appointment_confirmation(
             service_name=service_name,
             professional_name=professional_name,
             duration=duration,
+            frontend_url=settings.FRONTEND_URL,
         )
         
         # Determine if email was actually sent or skipped
