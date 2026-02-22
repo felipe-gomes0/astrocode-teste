@@ -63,7 +63,7 @@ def test_delete_other_user_forbidden(client: TestClient, normal_user, db) -> Non
     
     # Deve ser proibido (403)
     assert r.status_code == 403
-    assert r.json()["detail"] == "Not enough permissions"
+    assert r.json()["error"] == "Not enough permissions"
 
     # Limpeza
     crud_user.remove(db, id=other_user.id)
