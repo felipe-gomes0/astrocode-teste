@@ -112,14 +112,23 @@ Este guia é pensado para que o avaliador consiga testar **todos os aspectos do 
 
 ### Contas de Teste (pré-configuradas no seed)
 
-| Email                         | Senha         | Tipo         | Perfil                                            |
-| ----------------------------- | ------------- | ------------ | ------------------------------------------------- |
-| `prof@example.com`            | `password123` | Profissional | Barbeiro — 4 serviços, Seg-Sex 09-18h, Sáb 09-13h |
-| `ana.dentista@example.com`    | `password123` | Profissional | Dentista — 3 serviços, Seg-Qui 08-17h, Sex 08-14h |
-| `rafael.personal@example.com` | `password123` | Profissional | Personal Trainer — 3 serviços, Seg-Sáb 06-20h     |
-| `carla.psicologa@example.com` | `password123` | Profissional | Psicóloga — 3 serviços, Seg-Sex 10-19h            |
-| `client@example.com`          | `password123` | Cliente      | João Silva                                        |
-| `maria@example.com`           | `password123` | Cliente      | Maria Oliveira                                    |
+| Email                           | Senha      | Tipo         | Especialidade        |
+| ------------------------------- | ---------- | ------------ | -------------------- |
+| `roberto.silva@example.com`     | `senha123` | Profissional | Cardiologista        |
+| `ana.costa@example.com`         | `senha123` | Profissional | Dermatologista       |
+| `carlos.oliveira@example.com`   | `senha123` | Profissional | Personal Trainer     |
+| `mariana.santos@example.com`    | `senha123` | Profissional | Psicóloga            |
+| `pedro.souza@example.com`       | `senha123` | Profissional | Advogado Trabalhista |
+| `fernanda.lima@example.com`     | `senha123` | Profissional | Arquiteta            |
+| `lucas.pereira@example.com`     | `senha123` | Profissional | Barbeiro             |
+| `juliana.martins@example.com`   | `senha123` | Profissional | Nutricionista        |
+| `ricardo.almeida@example.com`   | `senha123` | Profissional | Mecânico             |
+| `camila.rocha@example.com`      | `senha123` | Profissional | Fotógrafa            |
+| `rodrigo.chef@example.com`      | `senha123` | Profissional | Chef Personal        |
+| `beatriz.yoga@example.com`      | `senha123` | Profissional | Instrutora de Yoga   |
+| `fernando.dentista@example.com` | `senha123` | Profissional | Dentista             |
+
+> **Nota:** Todos nascem com a agenda padrão configurada para Segunda a Sexta, das 09:00 às 18:00. Clientes não são criados no seed. Você pode se registrar como cliente pelo frontend ou usar o fluxo de agendamento "Guest".
 
 ### 🧪 Roteiro de Testes Sugerido
 
